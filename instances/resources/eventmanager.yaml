@@ -15,40 +15,40 @@ spec:
   ldap:
     mode: standalone
     storageSize: 1Gi
-    storageClass: 'ibmc-block-gold'
+    storageClass: 'vsphere-sc'
   backupRestore:
     enableAnalyticsBackups: false
-  version: 1.6.5
+  version: 1.6.6
   entitlementSecret: ibm-entitlement-key
-  clusterDomain: cpi4i-classic-fra02-b3c-e7d3d93b8b317d269525bf063b24f98d-0000.eu-de.containers.appdomain.cloud
+  clusterDomain: aiops.is.compose.se
   persistence:
     storageSizeNCOBackup: 5Gi
     enabled: true
     storageSizeNCOPrimary: 5Gi
-    storageClassNCOPrimary: 'ibmc-block-gold'
+    storageClassNCOPrimary: 'vsphere-sc'
     storageSizeImpactServer: 5Gi
-    storageClassImpactServer: 'ibmc-block-gold'
-    storageClassKafka: 'ibmc-block-gold'
+    storageClassImpactServer: 'vsphere-sc'
+    storageClassKafka: 'vsphere-sc'
     storageSizeKafka: 50Gi
-    storageClassCassandraBackup: 'ibmc-block-gold'
+    storageClassCassandraBackup: 'vsphere-sc'
     storageSizeCassandraBackup: 50Gi
-    storageClassZookeeper: 'ibmc-block-gold'
-    storageClassCouchdb: 'ibmc-block-gold'
+    storageClassZookeeper: 'vsphere-sc'
+    storageClassCouchdb: 'vsphere-sc'
     storageSizeZookeeper: 5Gi
     storageSizeCouchdb: 20Gi
-    storageClassCassandraData: 'ibmc-block-gold'
+    storageClassCassandraData: 'vsphere-sc'
     storageSizeCassandraData: 50Gi
-    storageClassElastic: 'ibmc-block-gold'
-    storageClassImpactGUI: 'ibmc-block-gold'
+    storageClassElastic: 'vsphere-sc'
+    storageClassImpactGUI: 'vsphere-sc'
     storageSizeImpactGUI: 5Gi
     storageSizeElastic: 75Gi
-    storageClassNCOBackup: 'ibmc-block-gold'
+    storageClassNCOBackup: 'vsphere-sc'
   deploymentType: trial
   topology:
-    storageClassElasticTopology: 'ibmc-block-gold'
+    storageClassElasticTopology: 'vsphere-sc'
     storageSizeElasticTopology: 75Gi
     storageSizeFileObserver: 5Gi
-    storageClassFileObserver: 'ibmc-block-gold'
+    storageClassFileObserver: 'vsphere-sc'
     iafCartridgeRequirementsName: ''
     appDisco:
       enabled: false
@@ -64,7 +64,7 @@ spec:
       bigfixinventory: false
       junipercso: false
       dns: true
-      itnm: false
+      itnm: true
       ansibleawx: false
       ciscoaci: false
       azure: false
@@ -72,7 +72,7 @@ spec:
       newrelic: false
       vmvcenter: true
       rest: true
-      appdynamics: true
+      appdynamics: false
       jenkins: false
       zabbix: false
       file: true
