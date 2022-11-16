@@ -9,5 +9,5 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: cp4i-block-performance
+  storageClassName: vcenter-sc
   volumeMode: Filesystem
