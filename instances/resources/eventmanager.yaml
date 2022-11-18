@@ -20,7 +20,7 @@ spec:
     enableAnalyticsBackups: false
   version: 1.6.6
   entitlementSecret: ibm-entitlement-key
-  clusterDomain: aiops.is.compose.se
+  clusterDomain: apps.aiops.is.compose.se
   persistence:
     storageSizeNCOBackup: 5Gi
     enabled: true
