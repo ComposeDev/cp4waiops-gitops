@@ -4,6 +4,8 @@ metadata:
   name: noi
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    clusterresourceoverrides.admission.autoscaling.openshift.io/enabled: "true"
 spec:
   finalizers:
   - kubernetes
