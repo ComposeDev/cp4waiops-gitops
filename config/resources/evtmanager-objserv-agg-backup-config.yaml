@@ -1,0 +1,1008 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: evtmanager-objserv-agg-backup-config
+data:
+  agg-gate-props-append: ''
+  agg-gate-startup-cmd-replace: ''
+  agg-gate-tblrep-def-replace: ''
+  agg-b-props-append: |
+    BackupObjectServer: TRUE
+  agg-b-sql-extensions: |
+    create database mydb;
+    go
+    ALTER TABLE alerts.status ADD new_column VARCHAR(50);
+    GO
+  agg-gate-map-replace: |
+    ##############################################################################
+    # Netcool/OMNIbus Bi-directional ObjectServer Gateway 8.1.0
+    #
+    # AGG_GATE Multitier map definition file.
+    #
+    # Notes:
+    #
+    # Fields that are marked as 'ON INSERT ONLY' will only be passed when an event
+    # is inserted for the first time. (ie. they will not be updated). The ordering
+    # of the fields is not important as the gateway will use named value insertion.
+    #
+    ##############################################################################
+    CREATE MAPPING StatusMap
+    (
+    	'Identifier'	   = 	'@Identifier'		ON INSERT ONLY,
+    	'Node'		   =	'@Node'			ON INSERT ONLY,
+    	'NodeAlias'	   =	'@NodeAlias'		ON INSERT ONLY
+    								NOTNULL '@Node',
+    	'Manager'	   =	'@Manager'		ON INSERT ONLY,
+    	'Agent'		   =	'@Agent'		ON INSERT ONLY,
+    	'AlertGroup'	   =	'@AlertGroup'		ON INSERT ONLY,
+    	'AlertKey'	   =	'@AlertKey'		ON INSERT ONLY,
+    	'Severity'	   =	'@Severity',
+    	'Summary'	   =	'@Summary',
+    	'FirstOccurrence'  =	'@FirstOccurrence'	ON INSERT ONLY,
+    	'LastOccurrence'   =	'@LastOccurrence',
+    	'InternalLast'	   =	'@InternalLast',
+    	'Poll'	  	   =	'@Poll'			ON INSERT ONLY,
+    	'Type'		   =	'@Type'			ON INSERT ONLY,
+    	'Tally'		   =	'@Tally',
+    	'ProbeSubSecondId' =	'@ProbeSubSecondId',
+    	'Class'		   =	'@Class'		ON INSERT ONLY,
+    	'Grade'		   =	'@Grade'		ON INSERT ONLY,
+    	'Location'	   =	'@Location'		ON INSERT ONLY,
+    	'OwnerUID'	   =	'@OwnerUID',
+    	'OwnerGID'	   =	'@OwnerGID',
+    	'Acknowledged'	   =	'@Acknowledged',
+    	'Flash'	  	   =	'@Flash',
+    	'EventId'	   =	'@EventId'		ON INSERT ONLY,
+    	'ExpireTime'	   =	'@ExpireTime'		ON INSERT ONLY,
+    	'ProcessReq'	   =	'@ProcessReq',
+    	'SuppressEscl'	   =	'@SuppressEscl',
+    	'Customer'	   =	'@Customer' 		ON INSERT ONLY,
+    	'Service'	   =	'@Service'		ON INSERT ONLY,
+    	'PhysicalSlot'	   =	'@PhysicalSlot'		ON INSERT ONLY,
+    	'PhysicalPort'	   =	'@PhysicalPort'		ON INSERT ONLY,
+    	'PhysicalCard'	   =	'@PhysicalCard'		ON INSERT ONLY,
+    	'TaskList'	   =	'@TaskList',
+    	'NmosSerial'	   =	'@NmosSerial',
+    	'NmosObjInst'	   =	'@NmosObjInst',
+    	'NmosCauseType'	   =	'@NmosCauseType',
+    	'NmosDomainName'   =	'@NmosDomainName',
+    	'NmosEntityId'     =	'@NmosEntityId',
+    	'NmosManagedStatus'=	'@NmosManagedStatus',
+    	'NmosEventMap'	   =	'@NmosEventMap',
+    	'LocalNodeAlias'   =	'@LocalNodeAlias'	ON INSERT ONLY,
+    	'LocalPriObj'	   =	'@LocalPriObj'		ON INSERT ONLY,
+    	'LocalSecObj'	   =	'@LocalSecObj'		ON INSERT ONLY,
+    	'LocalRootObj'	   =	'@LocalRootObj'		ON INSERT ONLY,
+    	'RemoteNodeAlias'  =	'@RemoteNodeAlias'	ON INSERT ONLY,
+    	'RemotePriObj'	   =	'@RemotePriObj'		ON INSERT ONLY,
+    	'RemoteSecObj'	   =	'@RemoteSecObj'		ON INSERT ONLY,
+    	'RemoteRootObj'	   =	'@RemoteRootObj'	ON INSERT ONLY,
+    	'X733EventType'    =	'@X733EventType'	ON INSERT ONLY,
+    	'X733ProbableCause'=	'@X733ProbableCause'	ON INSERT ONLY,
+    	'X733SpecificProb' =	'@X733SpecificProb'	ON INSERT ONLY,
+    	'X733CorrNotif'	   =	'@X733CorrNotif'	ON INSERT ONLY,
+    	'URL'		   =	'@URL'			ON INSERT ONLY,
+    	'ExtendedAttr'	   =	'@ExtendedAttr'		ON INSERT ONLY,
+    	'CollectionFirst'  =	'@CollectionFirst',
+    	'AggregationFirst' =	'@AggregationFirst',
+    
+    ##############################################################################
+    #
+    #       CUSTOM alerts.status FIELD MAPPINGS GO HERE
+    #
+    ##############################################################################
+    
+    ###############################################################################
+    #
+    # OOTB Event Grouping
+    #
+    ###############################################################################
+    
+    	'NormalisedAlarmName'	= '@NormalisedAlarmName',
+    	'NormalisedAlarmGroup'	= '@NormalisedAlarmGroup',
+    	'NormalisedAlarmCode'	= '@NormalisedAlarmCode',
+    	'ScopeID'		= '@ScopeID',
+    	'SiteName'		= '@SiteName',
+    	'CauseWeight'		= '@CauseWeight',
+    	'ImpactWeight'		= '@ImpactWeight',
+    	'ParentIdentifier'	= '@ParentIdentifier',
+    	'TTNumber'		= '@TTNumber',
+    	'QuietPeriod'		= '@QuietPeriod',
+    	'CustomText'		= '@CustomText',
+    	'JournalSent'		= '@JournalSent',
+    
+    ###############################################################################
+    #
+    # NcKL Advanced Correlation
+    #
+    ###############################################################################
+    
+    	'LocalTertObj'		= '@LocalTertObj',
+    	'LocalObjRelate'	= '@LocalObjRelate',
+    	'RemoteTertObj' 	= '@RemoteTertObj',
+    	'RemoteObjRelate'	= '@RemoteObjRelate',
+    	'CorrScore'		= '@CorrScore',
+    	'CauseType'		= '@CauseType',
+    	'AdvCorrCauseType'	= '@AdvCorrCauseType',
+    	'AdvCorrServerName'	= '@AdvCorrServerName',
+    	'AdvCorrServerSerial'	= '@AdvCorrServerSerial',
+    
+    ###############################################################################
+    #
+    # ASM sub-second generic clear
+    #
+    ###############################################################################
+    
+    	'LastOccurrenceUSec'	= '@LastOccurrenceUSec',
+    
+    ###############################################################################
+    #
+    # CEA Cloud Event Analytics
+    #
+    ###############################################################################
+    
+    	'AsmStatusId'               = '@AsmStatusId',
+    	'CEAAsmStatusDetails'       = '@CEAAsmStatusDetails',
+    	'CEAEventScore'             = '@CEAEventScore',
+    	'CEAEventClassification'    = '@CEAEventClassification',
+    	'CEACorrelationKey'         = '@CEACorrelationKey',
+    	'CEACorrelationDetails'     = '@CEACorrelationDetails',
+    	'CEAIsSeasonal'             = '@CEAIsSeasonal',
+    	'CEASeasonalDetails'        = '@CEASeasonalDetails',
+    
+    ###############################################################################
+    #
+    # Cloud Event Management
+    #
+    ###############################################################################
+    
+            'CEMSubscriptionID' = '@CEMSubscriptionID',
+            'CEMIncidentUUID' = '@CEMIncidentUUID',
+            'NodeType' = '@NodeType',
+            'CEMEventId' = '@CEMEventId',
+            'CEMErrorCode' = '@CEMErrorCode',
+            'CEMDeduplicationKey' = '@CEMDeduplicationKey',
+    
+    ###############################################################################
+    #
+    # Incident Management Workflow.
+    #
+    ###############################################################################
+            'TenantId'     = '@TenantId',
+            'IncidentUuid' = '@IncidentUuid',
+            'InstanceUuid' = '@InstanceUuid' 		ON INSERT ONLY,
+            'IncidentKey'  = '@IncidentKey',
+            'EventData'    = '@EventData',
+            'IsClosed'     = '@IsClosed',
+            'IsInIncident' = '@IsInIncident',
+    
+    ###############################################################################
+    #
+    # Runbook Automation.
+    #
+    ###############################################################################
+            'RunbookID'             = '@RunbookID',
+            'RunbookParameters'     = '@RunbookParameters',
+            'RunbookURL'            = '@RunbookURL',
+            'RunbookStatus'         = '@RunbookStatus',
+            'RunbookParametersB64'  = '@RunbookParametersB64',
+            'ImpactFlag'            = '@ImpactFlag',
+            'RunbookIDArray'        = '@RunbookIDArray',
+    
+    ##############################################################################
+    
+    	'ServerName'	   =	'@ServerName'		ON INSERT ONLY,
+    	'ServerSerial'	   =	'@ServerSerial'		ON INSERT ONLY
+    );
+    
+    CREATE MAPPING JournalMap
+    (
+    	'KeyField'	=	TO_STRING(STATUS.SERIAL) + ":" +
+    				TO_STRING('@UID') + ":" +
+    				TO_STRING('@Chrono')	ON INSERT ONLY,
+    	'Serial'	= 	STATUS.SERIAL,
+    	'Chrono'	= 	'@Chrono',
+    	'UID'		= 	TO_INTEGER('@UID'),
+    	'Text1'		= 	'@Text1',
+    	'Text2'		= 	'@Text2',
+    	'Text3'		=	'@Text3',
+    	'Text4'		=	'@Text4',
+    	'Text5'		=	'@Text5',
+    	'Text6'		=	'@Text6',
+    	'Text7'		=	'@Text7',
+    	'Text8'		=	'@Text8',
+    	'Text9'		=	'@Text9',
+    	'Text10'	=	'@Text10',
+    	'Text11'	=	'@Text11',
+    	'Text12'	=	'@Text12',
+    	'Text13'	=	'@Text13',
+    	'Text14'	=	'@Text14',
+    	'Text15'	=	'@Text15',
+    	'Text16'	=	'@Text16'
+    );
+    
+    CREATE MAPPING DetailsMap
+    (
+    	'KeyField'	=	'@Identifier' + '####' +
+    				TO_STRING('@Sequence')	ON INSERT ONLY,
+    	'Identifier'	= 	'@Identifier',
+    	'AttrVal'	= 	'@AttrVal',
+    	'Sequence'	= 	'@Sequence',
+    	'Name'		= 	'@Name',
+    	'Detail'	= 	'@Detail'
+    );
+    
+    CREATE MAPPING IducMap
+    (
+            'ServerName'    =       '@ServerName'   ON INSERT ONLY,
+            'AppName'       =       '@AppName',
+            'AppDesc'       =       '@AppDesc'      ON INSERT ONLY,
+            'ConnectionId'  =       '@ConnectionId' ON INSERT ONLY,
+            'LastIducTime'  =       '@LastIducTime'
+    );
+    
+    ##############################################################################
+    # Probe Registry map
+    #
+    # NOTE:
+    # 'ConnectionID'  	Only set on the original ObjectServer that probes are
+    #			connected to. Elsewhere it defaults to '0'.
+    ##############################################################################
+    CREATE MAPPING ProbeMap
+    (
+    	'Name'		=	'@Name'		ON INSERT ONLY,
+    	'Hostname'	=	'@Hostname'	ON INSERT ONLY,
+    	'ProbeType'	=	'@ProbeType',
+    	'HTTP_port'	=	'@HTTP_port',
+    	'HTTPS_port'	=	'@HTTPS_port',
+    	'RulesChecksum'	=	'@RulesChecksum',
+    	'PID'		=	'@PID',
+    	'Status'	=	'@Status',
+    	'StartTime'	=	'@StartTime',
+    	'LastUpdate'	=	'@LastUpdate',
+    	'ApiVersion'	=	'@ApiVersion',
+    	'ApiReleaseID'	=	'@ApiReleaseID'
+    );
+    
+    ##############################################################################
+    # NOTE: If replication of the user related system tables is required, uncomment
+    # the table mapping definitions below. The associated table replication
+    # definitions will also need to be uncommented.
+    ##############################################################################
+    
+    CREATE MAPPING SecurityUsersMap
+    (
+     	'UserID'	=	'@UserID'		ON INSERT ONLY,
+     	'UserName'	=	'@UserName',
+     	'SystemUser'	=	'@SystemUser',
+     	'FullName'	=	'@FullName',
+     	'Passwd'	=	'@Passwd',
+     	'UsePAM'	=	'@UsePAM',
+     	'Enabled'	=	'@Enabled'
+    );
+    
+    CREATE MAPPING SecurityGroupsMap
+    (
+     	'GroupID'	=	'@GroupID'		ON INSERT ONLY,
+     	'GroupName'	=	'@GroupName',
+     	'SystemGroup'	=	'@SystemGroup',
+     	'Description'	=	'@Description'
+    );
+    
+    CREATE MAPPING SecurityRolesMap
+    (
+     	'RoleID'	=	'@RoleID' 		ON INSERT ONLY,
+     	'RoleName'	=	'@RoleName',
+     	'SystemRole'	=	'@SystemRole',
+     	'Description'	=	'@Description',
+     	'RoleScope'	=	'@RoleScope'
+    );
+    
+    CREATE MAPPING SecurityRoleGrantsMap
+    (
+     	'GranteeType'	=	'@GranteeType' 		ON INSERT ONLY,
+     	'GranteeID'	=	'@GranteeID'		ON INSERT ONLY,
+     	'RoleID'	=	'@RoleID'		ON INSERT ONLY
+    );
+    
+    CREATE MAPPING SecurityGroupMembersMap
+    (
+     	'UserID'	= 	'@UserID' 		ON INSERT ONLY,
+     	'GroupID'	= 	'@GroupID' 		ON INSERT ONLY,
+     	'Compat'	= 	'@Compat'
+    );
+    
+    CREATE MAPPING CatalogRestrictionFiltersMap
+    (
+     	'RestrictionName' = 	'@RestrictionName' 	ON INSERT ONLY,
+     	'TableName'	  = 	'@TableName',
+     	'DatabaseName'	  = 	'@DatabaseName',
+    	'ConditionText'	  = 	'@ConditionText',
+    	'CreationText'	  = 	'@CreationText'
+    );
+    
+    CREATE MAPPING SecurityRestrictionFiltersMap
+    (
+    	'GranteeType'		=	'@GranteeType' 	ON INSERT ONLY,
+    	'GranteeID'		=	'@GranteeID' 	ON INSERT ONLY,
+    	'RestrictionName'	=	'@RestrictionName',
+    	'DatabaseName'		= 	'@DatabaseName',
+    	'TableName'		=	'@TableName'
+    );
+    
+    CREATE MAPPING SecurityPermissionsMap
+    (
+    	'ApplicationID'		= '@ApplicationID'	ON INSERT ONLY,
+    	'ObjectType'		= '@ObjectType'		ON INSERT ONLY,
+    	'Object'		= '@Object'		ON INSERT ONLY,
+    	'GranteeType'		= '@GranteeType'	ON INSERT ONLY,
+    	'GranteeID'		= '@GranteeID'		ON INSERT ONLY,
+    	'Allows'		= '@Allows',
+    	'Denies'		= '@Denies',
+    	'GrantOptions'		= '@GrantOptions'
+    );
+    
+    ##############################################################################
+    # NOTE: If replication of desktop  related system tables is required, uncomment
+    # the replication definitions below. The associated maps will also need to be
+    # uncommented.
+    ##############################################################################
+    
+    CREATE MAPPING ToolsMenusMap
+    (
+    	'MenuID'		=	'@MenuID' 	ON INSERT ONLY,
+    	'Name'			=	'@Name',
+    	'Owner'			=	'@Owner',
+    	'Enabled'		= 	'@Enabled'
+    );
+    
+    CREATE MAPPING ToolsMenuItemsMap
+    (
+    	'KeyField'		=	TO_STRING('@MenuID') + ":" +
+    					TO_STRING('@MenuItemID')
+    							ON INSERT ONLY,
+    	'MenuID'		=	'@MenuID' 	ON INSERT ONLY,
+    	'MenuItemID'		=	'@MenuItemID' 	ON INSERT ONLY,
+    	'Title'			=	'@Title',
+    	'Description'		=	'@Description',
+    	'Enabled'		=	'@Enabled',
+    	'InvokeType'		=	'@InvokeType',
+    	'InvokeID'		=	'@InvokeID',
+    	'Position'		=	'@Position',
+    	'Accelerator'		= 	'@Accelerator'
+    );
+    
+    CREATE MAPPING ToolsActionsMap
+    (
+    	'ActionID'		=	'@ActionID' 	ON INSERT ONLY,
+    	'Name'			=	'@Name',
+    	'Owner'			=	'@Owner',
+    	'Enabled'		=	'@Enabled',
+    	'Description1'		=	'@Description1',
+    	'Description2'		=	'@Description2',
+    	'Description3'		=	'@Description3',
+    	'Description4'		=	'@Description4',
+    	'HasInternal'		=	'@HasInternal',
+    	'InternalEffect1'	=	'@InternalEffect1',
+    	'InternalEffect2'	=	'@InternalEffect2',
+    	'InternalEffect3'	=	'@InternalEffect3',
+    	'InternalEffect4'	=	'@InternalEffect4',
+    	'InternalForEach'	=	'@InternalForEach',
+    	'HasExternal'		=	'@HasExternal',
+    	'ExternalEffect1'	=	'@ExternalEffect1',
+    	'ExternalEffect2'	=	'@ExternalEffect2',
+    	'ExternalEffect3'	=	'@ExternalEffect3',
+    	'ExternalEffect4'	=	'@ExternalEffect4',
+    	'ExternalForEach'	=	'@ExternalForEach',
+    	'RedirectOut'		=	'@RedirectOut',
+    	'RedirectErr'		=	'@RedirectErr',
+    	'Platform'		=	'@Platform',
+    	'JournalText1'		=	'@JournalText1',
+    	'JournalText2'		=	'@JournalText2',
+    	'JournalText3'		=	'@JournalText3',
+    	'JournalText4'		=	'@JournalText4',
+    	'JournalForEach'	=	'@JournalForEach',
+    	'HasForcedJournal'	=	'@HasForcedJournal'
+    );
+    
+    CREATE MAPPING ToolsActionAccessMap
+    (
+    	'ActionAccessID'	=	'@ActionAccessID' ON INSERT ONLY,
+    	'ActionID'		= 	'@ActionID',
+    	'GID'			=	'@GID',
+    	'ClassID'		=	'@ClassID'
+    );
+    
+    CREATE MAPPING ToolsMenuDefsMap
+    (
+    	'Name'			=	'@Name' 	ON INSERT ONLY,
+    	'DatabaseName'		= 	'@DatabaseName',
+    	'TableName'		=	'@TableName',
+    	'ShowField'		=	'@ShowField',
+    	'AssignField'		=	'@AssignField',
+    	'OrderbyField'		=	'@OrderbyField',
+    	'WhereClause'		=	'@WhereClause'
+    );
+    
+    CREATE MAPPING ToolsPromptDefsMap
+    (
+    	'Name'			=	'@Name'		ON INSERT ONLY,
+    	'Prompt'		= 	'@Prompt',
+    	'Default'		=	'@Default',
+    	'Value'			=	'@Value',
+    	'Type'			=	'@Type'
+    );
+    
+    CREATE MAPPING AlertsConversionsMap
+    (
+    	'KeyField'		=	'@KeyField'		ON INSERT ONLY,
+    	'Colname'		= 	'@Colname'		ON INSERT ONLY,
+    	'Value'			=	'@Value'		ON INSERT ONLY,
+    	'Conversion'		=	'@Conversion'
+    );
+    
+    CREATE MAPPING AlertsColVisualsMap
+    (
+    	'Colname'		=	'@Colname'		ON INSERT ONLY,
+    	'Title'			= 	'@Title',
+    	'DefWidth'		=	'@DefWidth',
+    	'MaxWidth'		=	'@MaxWidth',
+    	'TitleJustify'		=	'@TitleJustify',
+    	'DataJustify'		=	'@DataJustify'
+    );
+    
+    CREATE MAPPING AlertsColorsMap
+    (
+    	'Severity'		=	'@Severity'		ON INSERT ONLY,
+    	'AckedRed'		= 	'@AckedRed',
+    	'AckedGreen'		=	'@AckedGreen',
+    	'AckedBlue'		=	'@AckedBlue',
+    	'UnackedRed'		=	'@UnackedRed',
+    	'UnackedGreen'		=	'@UnackedGreen',
+    	'UnackedBlue'		=	'@UnackedBlue'
+    );
+    
+    ##############################################################################
+    # NOTE: If replication of the master.servergroups is is required, uncomment
+    # the table mapping definitions below. The associated table replication
+    # definitions will also need to be uncommented.
+    ##############################################################################
+    CREATE MAPPING MasterServergroupsMap
+    (
+           'ServerName'            =       '@ServerName'           ON INSERT ONLY,
+           'GroupID'               =       '@GroupID',
+           'Weight'                =       '@Weight'
+    );
+    
+    ##############################################################################
+    # TABLES USED BY OOTB EVENT GROUPING - APPEND TO THE END OF THE FILE
+    ##############################################################################
+    CREATE MAPPING MasterPropertiesMap
+    (
+    	'Name'			=	'@Name'			ON INSERT ONLY,
+    	'CharValue'		=	'@CharValue',
+    	'IntValue'		=	'@IntValue'
+    );
+    
+    CREATE MAPPING MasterCorrelationSiteNameMap
+    (
+    	'SiteName'		=	'@SiteName'		ON INSERT ONLY,
+    	'ScopeID'		=	'@ScopeID'		ON INSERT ONLY,
+    	'Identifier'		=	'@Identifier',
+            'CustomText'            =       '@CustomText',
+            'CustomTimestamp'       =       '@CustomTimestamp',
+            'CustomWeight'          =       '@CustomWeight',
+            'HighImpactWeight'      =       '@HighImpactWeight',
+            'HighImpactText'        =       '@HighImpactText',
+            'HighCauseWeight'       =       '@HighCauseWeight',
+            'HighCauseText'         =       '@HighCauseText'
+    );
+    
+    CREATE MAPPING MasterCorrelationScopeIDMap
+    (
+    	'ScopeID'		=	'@ScopeID'		ON INSERT ONLY,
+    	'LastOccurrence'	=	'@LastOccurrence',
+    	'Identifier'		=	'@Identifier',
+    	'ExpireTime'		=	'@ExpireTime',
+            'CustomText'            =       '@CustomText',
+            'CustomTimestamp'       =       '@CustomTimestamp',
+            'CustomWeight'          =       '@CustomWeight',
+            'HighImpactWeight'      =       '@HighImpactWeight',
+            'HighImpactText'        =       '@HighImpactText',
+            'HighCauseWeight'       =       '@HighCauseWeight',
+            'HighCauseText'         =       '@HighCauseText'
+    );
+    
+    CREATE MAPPING MasterCorrelationScopeAliasMembersMap
+    (
+    	'ScopeID'		=	'@ScopeID'		ON INSERT ONLY,
+    	'ScopeAlias'		=	'@ScopeAlias'
+    );
+    
+    CREATE MAPPING MasterCorrelationPriorityChildrenMap
+    (
+    	'Identifier'		=	'@Identifier'		ON INSERT ONLY,
+    	'CustomText'		=	'@CustomText',
+    	'CustomTimestamp'	=	'@CustomTimestamp',
+    	'CustomWeight'		=	'@CustomWeight',
+    	'HighImpactWeight'	=	'@HighImpactWeight',
+    	'HighImpactText'	=	'@HighImpactText',
+    	'HighCauseWeight'	=	'@HighCauseWeight',
+    	'HighCauseText'		=	'@HighCauseText'
+    );
+    
+    CREATE MAPPING MasterCorrelationScopePolicyMap
+    (
+    	'PolicyId'		=	'@PolicyId'		ON INSERT ONLY,
+    	'PolicyData'		=	'@PolicyData',
+    	'CreatedBy'		=	'@CreatedBy',
+    	'TriggerName'		=	'@TriggerName',
+    	'LastRun'		=	'@LastRun'
+    );
+    
+    ###############################################################################
+    #
+    # Netcool/Impact Related Events Gateway Mapping
+    #
+    ###############################################################################
+    CREATE MAPPING RE_CACHEMAP
+    (
+    	'name'			=	'@name'			ON INSERT ONLY,
+    	'updates'		=	'@updates'
+    );
+    
+    ###############################################################################
+    #
+    # Netcool Knowledge Library Field Mapping Definition
+    #
+    ###############################################################################
+    CREATE MAPPING NCKL_ADVCORRLPCSYMCAND
+    (
+        'Identifier'		=	'@Identifier'		ON INSERT ONLY,
+        'AdvCorrServerName'		=	'@AdvCorrServerName',
+        'AdvCorrServerSerial'	=	'@AdvCorrServerSerial',
+        'Node'			=	'@Node',
+        'AdvCorrCauseType'		=	'@AdvCorrCauseType',
+        'LocalNodeAlias'		=	'@LocalNodeAlias',
+        'LocalPriObj'		=	'@LocalPriObj',
+        'LocalSecObj'		=	'@LocalSecObj',
+        'LocalTertObj'		=	'@LocalTertObj',
+        'LocalRootObj'		=	'@LocalRootObj',
+        'LocalObjRelate'		=	'@LocalObjRelate'
+    );
+    
+    CREATE MAPPING NCKL_ADVCORRLPCRCCAND
+    (
+        'Identifier'		=	'@Identifier'		ON INSERT ONLY,
+        'ServerName'		=	'@ServerName',
+        'ServerSerial'		=	'@ServerSerial',
+        'Node'			=	'@Node',
+        'AdvCorrCauseType'		=	'@AdvCorrCauseType',
+        'LocalNodeAlias'		=	'@LocalNodeAlias',
+        'LocalPriObj'		=	'@LocalPriObj',
+        'LocalSecObj'		=	'@LocalSecObj',
+        'LocalTertObj'		=	'@LocalTertObj',
+        'LocalRootObj'		=	'@LocalRootObj',
+        'LocalObjRelate'		=	'@LocalObjRelate'
+    );
+    
+    ###############################################################################
+    #
+    # CEA Cloud Event Analytics Mapping
+    #
+    ###############################################################################
+    
+    CREATE MAPPING CEAProperities
+    (
+        'Name'                =	'@Name' 			ON INSERT ONLY,
+        'CharValue'	          =	'@CharValue',
+        'IntValue'            =	'@IntValue'
+    );
+    
+    CREATE MAPPING CEASiteName
+    (
+        'SiteName'            =	'@SiteName'			ON INSERT ONLY,
+        'CEACorrelationKey'   =	'@CEACorrelationKey'		ON INSERT ONLY,
+        'Identifier'          =	'@Identifier',
+        'CustomText'          =	'@CustomText',
+        'CustomTimestamp'     =	'@CustomTimestamp',
+        'CustomWeight'        =	'@CustomWeight',
+        'HighImpactWeight'    =	'@HighImpactWeight',
+        'HighImpactText'      =	'@HighImpactText',
+        'HighCauseWeight'     =	'@HighCauseWeight',
+        'HighCauseText'       =	'@HighCauseText'
+    );
+    
+    CREATE MAPPING CEACKey
+    (
+        'CEACorrelationKey'   =	'@CEACorrelationKey'		ON INSERT ONLY,
+        'LastOccurrence'      =	'@LastOccurrence',
+        'Identifier'          =	'@Identifier',
+        'ExpireTime'          =	'@ExpireTime',
+        'CustomText'          = 	'@CustomText',
+        'CustomTimestamp'     =	'@CustomTimestamp',
+        'CustomWeight'        =	'@CustomWeight',
+        'HighImpactWeight'    =	'@HighImpactWeight',
+        'HighImpactText'      =	'@HighImpactText',
+        'HighCauseWeight'     =	'@HighCauseWeight',
+        'HighCauseText'       =	'@HighCauseText'
+    );
+    
+    CREATE MAPPING CEACKeyAliasMembers
+    (
+        'CEACorrelationKey'   =	'@CEACorrelationKey'		ON INSERT ONLY,
+        'CorrelationKeyAlias' =	'@CorrelationKeyAlias'
+    );
+    
+    CREATE MAPPING CEAPriorityChildren
+    (
+        'Identifier'          =	'@Identifier'			ON INSERT ONLY,
+        'CustomText'          =	'@CustomText',
+        'CustomTimestamp'     =	'@CustomTimestamp',
+        'CustomWeight'        =	'@CustomWeight',
+        'HighImpactWeight'    =	'@HighImpactWeight',
+        'HighImpactText'      =     '@HighImpactText',
+        'HighCauseWeight'     =	'@HighCauseWeight',
+        'HighCauseText'       =	'@HighCauseText'
+    );
+    
+    ###############################################################################
+    #
+    # Incident Management Replicaton Definitions. (NOI Datalayer)
+    #
+    ###############################################################################
+    CREATE MAPPING NOIIMIncidents
+    (
+        'TenantId'           = '@TenantId' ON INSERT ONLY,
+        'IncidentUuid'       = '@IncidentUuid' ON INSERT ONLY,
+        'CorrelationKey'     = '@CorrelationKey',
+        'CorrelationDetails' = '@CorrelationDetails',
+        'CreatedTime'        = '@CreatedTime',
+        'DisplayId'          = '@DisplayId',
+        'Headline'           = '@Headline',
+        'Summary'            = '@Summary',
+        'IncidentPriority'   = '@IncidentPriority',
+        'Escalated'          = '@Escalated',
+        'LastChanged'        = '@LastChanged',
+        'IncidentState'      = '@IncidentState',
+        'ResolutionCode'     = '@ResolutionCode',
+        'Team'               = '@Team',
+        'Owner'              = '@Owner',
+        'AssignedBy'         = '@AssignedBy',
+        'IncidentData'       = '@IncidentData',
+        'Active'             = '@Active'
+    );
+    
+    CREATE MAPPING NOIIMResources
+    (
+        'TenantId'           = '@TenantId' ON INSERT ONLY,
+        'IncidentUuid'       = '@IncidentUuid' ON INSERT ONLY,
+        'Type'               = '@Type' ON INSERT ONLY,
+        'Name'               = '@Name' ON INSERT ONLY,
+        'StartTime'          = '@StartTime'
+    );
+    
+    CREATE MAPPING NOIIMTimeline
+    (
+        'TenantId'           = '@TenantId' ON INSERT ONLY,
+        'IncidentUuid'       = '@IncidentUuid' ON INSERT ONLY,
+        'TimelineUuid'       = '@TimelineUuid' ON INSERT ONLY,
+        'InstanceUuid'       = '@InstanceUuid',
+        'Timestamp'          = '@Timestamp',
+        'Type'               = '@Type',
+        'CommentText'        = '@CommentText',
+        'CommentBy'          = '@CommentBy',
+        'Team'               = '@Team',
+        'Owner'              = '@Owner',
+        'NewState'           = '@NewState',
+        'ResolutionCode'     = '@ResolutionCode',
+        'Details'            = '@Details'
+    );
+    
+    CREATE MAPPING NOIIMProperties
+    (
+        'TenantId'           = '@TenantId' ON INSERT ONLY,
+        'IncidentUuid'       = '@IncidentUuid' ON INSERT ONLY,
+        'Source'             = '@Source' ON INSERT ONLY,
+        'Name'               = '@Name' ON INSERT ONLY,
+        'Value'              = '@Value'
+    );
+    
+    ###############################################################################
+    #
+    # HA on ObjectServer
+    #
+    ###############################################################################
+    CREATE MAPPING dashhanodesmap
+    (
+    	'NODE_ID' 			= '@NODE_ID' ON INSERT ONLY,
+    	'KEY' 				= '@KEY',
+    	'URI' 				= '@URI',
+    	'NAME' 				= '@NAME',
+    	'LAST_UPDATED' 		= '@LAST_UPDATED',
+    	'LOCKED' 			= '@LOCKED',
+    	'STATUS' 			= '@STATUS'
+    );
+    
+    CREATE MAPPING dashhachartpropmap
+    (
+    	'id1' 				= '@id1' ON INSERT ONLY,
+    	'value' 			= '@value'
+    );
+    
+    CREATE MAPPING dashhaconnectionsmap
+    (
+    	'CONTEXT_ROOT' 		= '@CONTEXT_ROOT',
+    	'PASSWORD1' 		= '@PASSWORD1',
+    	'CONNECTION_TYPE' 	= '@CONNECTION_TYPE',
+    	'PORT' 				= '@PORT',
+    	'HOST1' 			= '@HOST1',
+    	'CREDENTIAL_TYPE' 	= '@CREDENTIAL_TYPE',
+    	'USERNAME' 			= '@USERNAME',
+    	'RENDER_FORMAT' 	= '@RENDER_FORMAT',
+    	'MSS_NAME' 			= '@MSS_NAME',
+    	'PROTOCOL' 			= '@PROTOCOL',
+    	'NAME' 				= '@NAME' ON INSERT ONLY,
+    	'SERVICE_NAME' 		= '@SERVICE_NAME'
+    );
+    
+    CREATE MAPPING dashhaconsoleanalyticsdbaccessmap
+    (
+    	'PAGEID' 			= '@PAGEID' ON INSERT ONLY,
+    	'PAGETITLE' 		= '@PAGETITLE',
+    	'LAST_TIME_ACCESSED' = '@LAST_TIME_ACCESSED',
+    	'PAGE_ACCESS_COUNT' = '@PAGE_ACCESS_COUNT',
+    	'INTERNAL_TS' 		= '@INTERNAL_TS',
+    	'MODULEREF' 		= '@MODULEREF'
+    );
+    
+    CREATE MAPPING dashhaconsoleanalyticstblnamesmap
+    (
+    	'INTERNAL_TS' 		= '@INTERNAL_TS',
+    	'TABLENAME' 		= '@TABLENAME' ON INSERT ONLY,
+    	'TBLSCHEMA' 		= '@TBLSCHEMA'
+    );
+    
+    CREATE MAPPING dashhadatasetsmap
+    (
+    	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE',
+    	'ID1' 				= '@ID1' ON INSERT ONLY,
+    	'VALUE' 			= '@VALUE',
+    	'LABEL' 			= '@LABEL',
+    	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhadatasourcesmap
+    (
+    	'LABEL' 			= '@LABEL',
+    	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE',
+    	'WARNAME' 			= '@WARNAME',
+    	'TYPE' 				= '@TYPE' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhafederationsmap
+    (
+    	'LOCATION' 			= '@LOCATION',
+    	'URL' 				= '@URL',
+    	'NAME' 				= '@NAME',
+    	'ID1' 				= '@ID1' ON INSERT ONLY,
+    	'VIEWMEMBER' 		= '@VIEWMEMBER'
+    );
+    
+    CREATE MAPPING dashhaglobalconfigmap
+    (
+    	'KEY' 				= '@KEY' ON INSERT ONLY,
+    	'VALUE' 			= '@VALUE'
+    );
+    
+    CREATE MAPPING dashhagroupsmap
+    (
+    	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY,
+    	'LABEL' 			= '@LABEL',
+    	'ID1' 				= '@ID1' ON INSERT ONLY,
+    	'PROVIDER_TYPE' 	= '@PROVIDER_TYPE' ON INSERT ONLY,
+    	'DESCRIPTION' 		= '@DESCRIPTION',
+    	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE'
+    );
+    
+    CREATE MAPPING dashhamodulesmap
+    (
+    	'VERSION' 			= '@VERSION',
+    	'NAME' 				= '@NAME',
+    	'MODULE_ID' 		= '@MODULE_ID' ON INSERT ONLY,
+    	'LAST_UPDATED' 		= '@LAST_UPDATED'
+    );
+    
+    CREATE MAPPING dashhanlresourcesmap
+    (
+    	'NL_KEY' 			= '@NL_KEY' ON INSERT ONLY,
+    	'VALUE' 			= '@VALUE',
+    	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE' ON INSERT ONLY,
+    	'LOCALE' 			= '@LOCALE' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhanodesstoresmap
+    (
+    	'NODE_ID' 			= '@NODE_ID',
+    	'LAST_UPDATED' 		= '@LAST_UPDATED',
+    	'STORE_ID' 			= '@STORE_ID',
+    	'DUMMI' 			= '@DUMMI' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhapasswdkeysmap
+    (
+    	'ID1' 				= '@ID1' ON INSERT ONLY,
+    	'PASSWORD_KEY' 		= '@PASSWORD_KEY'
+    );
+    
+    CREATE MAPPING dashhaprofilesmap
+    (
+    	'ATTR_NAME' 		= '@ATTR_NAME',
+    	'TYPE' 				= '@TYPE',
+    	'PROFILE_ID' 		= '@PROFILE_ID',
+    	'USERNAME' 			= '@USERNAME',
+    	'VALUE' 			= '@VALUE',
+    	'LARGE_VALUE' 		= '@LARGE_VALUE',
+    	'DUMMI' 			= '@DUMMI' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhaprofimetadatamap
+    (
+    	'PAGE_ID' 			= '@PAGE_ID',
+    	'PROFILE_ID' 		= '@PROFILE_ID',
+    	'WINDOW_ID' 		= '@WINDOW_ID',
+    	'DUMMI' 			= '@DUMMI' ON INSERT ONLY,
+    	'PAGE_NAME' 		= '@PAGE_NAME'
+    );
+    
+    CREATE MAPPING dashhaprovidersmap
+    (
+    	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE',
+    	'TYPE' 				= '@TYPE' ON INSERT ONLY,
+    	'LABEL' 			= '@LABEL',
+    	'DESCRIPTION' 		= '@DESCRIPTION'
+    );
+    
+    CREATE MAPPING dashhasapmuiconmgrmap
+    (
+    	'NAME' 				= '@NAME' ON INSERT ONLY,
+    	'DISPLAYNAME' 		= '@DISPLAYNAME',
+    	'CURRENTVALUE' 		= '@CURRENTVALUE',
+    	'DEFAULTVALUE' 		= '@DEFAULTVALUE',
+    	'FIELDTYPE' 		= '@FIELDTYPE',
+    	'FIELDNAME' 		= '@FIELDNAME' ON INSERT ONLY,
+    	'FIELDORDER' 		= '@FIELDORDER'
+    );
+    
+    CREATE MAPPING dashhastoresmap
+    (
+    	'NAME' 				= '@NAME',
+    	'DUMMI' 			= '@DUMMI' ON INSERT ONLY,
+    	'LAST_UPDATED'		= '@LAST_UPDATED',
+    	'STORE_ID' 			= '@STORE_ID',
+    	'DATA' 				= '@DATA'
+    );
+    
+    CREATE MAPPING dashhawidgetsmap
+    (
+    	'LAST_MODIFIED' 	= '@LAST_MODIFIED',
+    	'VERSION' 			= '@VERSION' ON INSERT ONLY,
+    	'LABEL' 			= '@LABEL',
+    	'DESCRIPTION' 		= '@DESCRIPTION',
+    	'SUBTYPE' 			= '@SUBTYPE',
+    	'CREATED_BY' 		= '@CREATED_BY',
+    	'CREATED_ON' 		= '@CREATED_ON',
+    	'ID1' 				= '@ID1' ON INSERT ONLY,
+    	'PROVIDER_TYPE' 	= '@PROVIDER_TYPE' ON INSERT ONLY,
+    	'DESIGN' 			= '@DESIGN',
+    	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY,
+    	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE',
+    	'SCHEMA_ID' 		= '@SCHEMA_ID',
+    	'FORMAT1' 			= '@FORMAT1',
+    	'LAST_MODIFIED_BY' 	= '@LAST_MODIFIED_BY',
+    	'SCHEMA_VERSION' 	= '@SCHEMA_VERSION'
+    );
+    
+    CREATE MAPPING dashhawidgetdatasetsmap
+    (
+    	'WIDGET_ID' 		= '@WIDGET_ID' ON INSERT ONLY,
+    	'PROVIDER_TYPE' 	= '@PROVIDER_TYPE' ON INSERT ONLY,
+    	'DATA_SET_ID' 		= '@DATA_SET_ID' ON INSERT ONLY,
+    	'WIDGET_VERSION' 	= '@WIDGET_VERSION' ON INSERT ONLY,
+    	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhawidgetgroupsmap
+    (
+    	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY,
+    	'WIDGET_ID' 		= '@WIDGET_ID' ON INSERT ONLY,
+    	'PROVIDER_TYPE' 	= '@PROVIDER_TYPE' ON INSERT ONLY,
+    	'GROUP_ID' 			= '@GROUP_ID' ON INSERT ONLY,
+    	'WIDGET_VERSION' 	= '@WIDGET_VERSION' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhawidgetschemamap
+    (
+    	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE',
+    	'DESCRIPTION' 		= '@DESCRIPTION',
+    	'LABEL' 			= '@LABEL',
+    	'WIDGET_SCHEMA' 	= '@WIDGET_SCHEMA',
+    	'VERSION' 			= '@VERSION' ON INSERT ONLY,
+    	'ID1' 				= '@ID1' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING dashhaxmldocumentsmap
+    (
+    	'XML_DOCUMENT' 		= '@XML_DOCUMENT',
+    	'ID1' 				= '@ID1' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING NcwHaConfigItemsMap
+    (
+    	'Type' 				= '@Type',
+    	'ConfigItemContentId' = '@ConfigItemContentId',
+    	'Key' 				= '@Key',
+    	'Namespace' 		= '@Namespace',
+    	'ConfigItemId' 		= '@ConfigItemId' ON INSERT ONLY,
+    	'Checksum' 			= '@Checksum',
+    	'Path' 				= '@Path',
+    	'LastUpdated' 		= '@LastUpdated',
+    	'LastUpdatedText' 	= '@LastUpdatedText'
+    );
+    
+    CREATE MAPPING NcwHaConfigItemsContentMap
+    (
+    	'PartNumber' 		= '@PartNumber',
+    	'ContentId' 		= '@ContentId' ON INSERT ONLY,
+    	'Key' 				= '@Key',
+    	'ConfigItemIdRef' 	= '@ConfigItemIdRef',
+    	'Content' 			= '@Content'
+    );
+    
+    CREATE MAPPING NcwHaNodesMap
+    (
+    	'Uri' 				= '@Uri' ON INSERT ONLY,
+    	'NodeId' 			= '@NodeId' ON INSERT ONLY
+    );
+    
+    CREATE MAPPING NcwHaNodesConfigItemsMap
+    (
+    	'AssociationId' 	= '@AssociationId' ON INSERT ONLY,
+    	'ConfigItemId' 		= '@ConfigItemId',
+    	'LastUpdated' 		= '@LastUpdated',
+    	'LastUpdatedText' 	= '@LastUpdatedText',
+    	'NodeId' 			= '@NodeId'
+    );
+    
+    ###############################################################################
+    #
+    # WebGUI & WAS OAUTH20 Persistence Service on ObjectServer
+    #
+    ###############################################################################
+    CREATE MAPPING Oauth20CacheMap
+    (
+        'LOOKUPKEY'         = '@LOOKUPKEY' ON INSERT ONLY,
+        'UNIQUEID'          = '@UNIQUEID',
+        'COMPONENTID'       = '@COMPONENTID',
+        'TYPE'              = '@TYPE',
+        'SUBTYPE'           = '@SUBTYPE',
+        'CREATEDAT'         = '@CREATEDAT',
+        'LIFETIME'          = '@LIFETIME',
+        'EXPIRES'           = '@EXPIRES',
+        'TOKENSTRING'       = '@TOKENSTRING',
+        'CLIENTID'          = '@CLIENTID',
+        'USERNAME'          = '@USERNAME',
+        'SCOPE'             = '@SCOPE',
+        'REDIRECTURI'       = '@REDIRECTURI',
+        'STATEID'           = '@STATEID'
+    );
+    
+    CREATE MAPPING Oauth20ClientConfig
+    (
+        'COMPONENTID'       = '@COMPONENTID' ON INSERT ONLY,
+        'CLIENTID'          = '@CLIENTID' ON INSERT ONLY,
+        'CLIENTSECRET'      = '@CLIENTSECRET',
+        'DISPLAYNAME'       = '@DISPLAYNAME',
+        'REDIRECTURI'       = '@REDIRECTURI',
+        'ENABLED'           = '@ENABLED'
+    );
