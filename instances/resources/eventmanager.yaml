@@ -16,6 +16,8 @@ spec:
     mode: standalone
     storageSize: 1Gi
     storageClass: 'vsphere-sc'
+  helmValuesNOI:
+    global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
   version: 1.6.6
