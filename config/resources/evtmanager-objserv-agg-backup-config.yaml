@@ -85,19 +85,19 @@ data:
     	'ExtendedAttr'	   =	'@ExtendedAttr'		ON INSERT ONLY,
     	'CollectionFirst'  =	'@CollectionFirst',
     	'AggregationFirst' =	'@AggregationFirst',
-    
+
     ##############################################################################
     #
     #       CUSTOM alerts.status FIELD MAPPINGS GO HERE
     #
     ##############################################################################
-    
+
     ###############################################################################
     #
     # OOTB Event Grouping
     #
     ###############################################################################
-    
+
     	'NormalisedAlarmName'	= '@NormalisedAlarmName',
     	'NormalisedAlarmGroup'	= '@NormalisedAlarmGroup',
     	'NormalisedAlarmCode'	= '@NormalisedAlarmCode',
@@ -110,13 +110,13 @@ data:
     	'QuietPeriod'		= '@QuietPeriod',
     	'CustomText'		= '@CustomText',
     	'JournalSent'		= '@JournalSent',
-    
+
     ###############################################################################
     #
     # NcKL Advanced Correlation
     #
     ###############################################################################
-    
+
     	'LocalTertObj'		= '@LocalTertObj',
     	'LocalObjRelate'	= '@LocalObjRelate',
     	'RemoteTertObj' 	= '@RemoteTertObj',
@@ -126,21 +126,21 @@ data:
     	'AdvCorrCauseType'	= '@AdvCorrCauseType',
     	'AdvCorrServerName'	= '@AdvCorrServerName',
     	'AdvCorrServerSerial'	= '@AdvCorrServerSerial',
-    
+
     ###############################################################################
     #
     # ASM sub-second generic clear
     #
     ###############################################################################
-    
+
     	'LastOccurrenceUSec'	= '@LastOccurrenceUSec',
-    
+
     ###############################################################################
     #
     # CEA Cloud Event Analytics
     #
     ###############################################################################
-    
+
     	'AsmStatusId'               = '@AsmStatusId',
     	'CEAAsmStatusDetails'       = '@CEAAsmStatusDetails',
     	'CEAEventScore'             = '@CEAEventScore',
@@ -149,20 +149,20 @@ data:
     	'CEACorrelationDetails'     = '@CEACorrelationDetails',
     	'CEAIsSeasonal'             = '@CEAIsSeasonal',
     	'CEASeasonalDetails'        = '@CEASeasonalDetails',
-    
+
     ###############################################################################
     #
     # Cloud Event Management
     #
     ###############################################################################
-    
+
             'CEMSubscriptionID' = '@CEMSubscriptionID',
             'CEMIncidentUUID' = '@CEMIncidentUUID',
             'NodeType' = '@NodeType',
             'CEMEventId' = '@CEMEventId',
             'CEMErrorCode' = '@CEMErrorCode',
             'CEMDeduplicationKey' = '@CEMDeduplicationKey',
-    
+
     ###############################################################################
     #
     # Incident Management Workflow.
@@ -175,7 +175,7 @@ data:
             'EventData'    = '@EventData',
             'IsClosed'     = '@IsClosed',
             'IsInIncident' = '@IsInIncident',
-    
+
     ###############################################################################
     #
     # Runbook Automation.
@@ -188,13 +188,13 @@ data:
             'RunbookParametersB64'  = '@RunbookParametersB64',
             'ImpactFlag'            = '@ImpactFlag',
             'RunbookIDArray'        = '@RunbookIDArray',
-    
+
     ##############################################################################
-    
+
     	'ServerName'	   =	'@ServerName'		ON INSERT ONLY,
     	'ServerSerial'	   =	'@ServerSerial'		ON INSERT ONLY
     );
-    
+
     CREATE MAPPING JournalMap
     (
     	'KeyField'	=	TO_STRING(STATUS.SERIAL) + ":" +
@@ -220,7 +220,7 @@ data:
     	'Text15'	=	'@Text15',
     	'Text16'	=	'@Text16'
     );
-    
+
     CREATE MAPPING DetailsMap
     (
     	'KeyField'	=	'@Identifier' + '####' +
@@ -231,7 +231,7 @@ data:
     	'Name'		= 	'@Name',
     	'Detail'	= 	'@Detail'
     );
-    
+
     CREATE MAPPING IducMap
     (
             'ServerName'    =       '@ServerName'   ON INSERT ONLY,
@@ -240,7 +240,7 @@ data:
             'ConnectionId'  =       '@ConnectionId' ON INSERT ONLY,
             'LastIducTime'  =       '@LastIducTime'
     );
-    
+
     ##############################################################################
     # Probe Registry map
     #
@@ -263,13 +263,13 @@ data:
     	'ApiVersion'	=	'@ApiVersion',
     	'ApiReleaseID'	=	'@ApiReleaseID'
     );
-    
+
     ##############################################################################
     # NOTE: If replication of the user related system tables is required, uncomment
     # the table mapping definitions below. The associated table replication
     # definitions will also need to be uncommented.
     ##############################################################################
-    
+
     CREATE MAPPING SecurityUsersMap
     (
      	'UserID'	=	'@UserID'		ON INSERT ONLY,
@@ -280,7 +280,7 @@ data:
      	'UsePAM'	=	'@UsePAM',
      	'Enabled'	=	'@Enabled'
     );
-    
+
     CREATE MAPPING SecurityGroupsMap
     (
      	'GroupID'	=	'@GroupID'		ON INSERT ONLY,
@@ -288,7 +288,7 @@ data:
      	'SystemGroup'	=	'@SystemGroup',
      	'Description'	=	'@Description'
     );
-    
+
     CREATE MAPPING SecurityRolesMap
     (
      	'RoleID'	=	'@RoleID' 		ON INSERT ONLY,
@@ -297,21 +297,21 @@ data:
      	'Description'	=	'@Description',
      	'RoleScope'	=	'@RoleScope'
     );
-    
+
     CREATE MAPPING SecurityRoleGrantsMap
     (
      	'GranteeType'	=	'@GranteeType' 		ON INSERT ONLY,
      	'GranteeID'	=	'@GranteeID'		ON INSERT ONLY,
      	'RoleID'	=	'@RoleID'		ON INSERT ONLY
     );
-    
+
     CREATE MAPPING SecurityGroupMembersMap
     (
      	'UserID'	= 	'@UserID' 		ON INSERT ONLY,
      	'GroupID'	= 	'@GroupID' 		ON INSERT ONLY,
      	'Compat'	= 	'@Compat'
     );
-    
+
     CREATE MAPPING CatalogRestrictionFiltersMap
     (
      	'RestrictionName' = 	'@RestrictionName' 	ON INSERT ONLY,
@@ -320,7 +320,7 @@ data:
     	'ConditionText'	  = 	'@ConditionText',
     	'CreationText'	  = 	'@CreationText'
     );
-    
+
     CREATE MAPPING SecurityRestrictionFiltersMap
     (
     	'GranteeType'		=	'@GranteeType' 	ON INSERT ONLY,
@@ -329,7 +329,7 @@ data:
     	'DatabaseName'		= 	'@DatabaseName',
     	'TableName'		=	'@TableName'
     );
-    
+
     CREATE MAPPING SecurityPermissionsMap
     (
     	'ApplicationID'		= '@ApplicationID'	ON INSERT ONLY,
@@ -341,13 +341,13 @@ data:
     	'Denies'		= '@Denies',
     	'GrantOptions'		= '@GrantOptions'
     );
-    
+
     ##############################################################################
     # NOTE: If replication of desktop  related system tables is required, uncomment
     # the replication definitions below. The associated maps will also need to be
     # uncommented.
     ##############################################################################
-    
+
     CREATE MAPPING ToolsMenusMap
     (
     	'MenuID'		=	'@MenuID' 	ON INSERT ONLY,
@@ -355,7 +355,7 @@ data:
     	'Owner'			=	'@Owner',
     	'Enabled'		= 	'@Enabled'
     );
-    
+
     CREATE MAPPING ToolsMenuItemsMap
     (
     	'KeyField'		=	TO_STRING('@MenuID') + ":" +
@@ -371,7 +371,7 @@ data:
     	'Position'		=	'@Position',
     	'Accelerator'		= 	'@Accelerator'
     );
-    
+
     CREATE MAPPING ToolsActionsMap
     (
     	'ActionID'		=	'@ActionID' 	ON INSERT ONLY,
@@ -404,7 +404,7 @@ data:
     	'JournalForEach'	=	'@JournalForEach',
     	'HasForcedJournal'	=	'@HasForcedJournal'
     );
-    
+
     CREATE MAPPING ToolsActionAccessMap
     (
     	'ActionAccessID'	=	'@ActionAccessID' ON INSERT ONLY,
@@ -412,7 +412,7 @@ data:
     	'GID'			=	'@GID',
     	'ClassID'		=	'@ClassID'
     );
-    
+
     CREATE MAPPING ToolsMenuDefsMap
     (
     	'Name'			=	'@Name' 	ON INSERT ONLY,
@@ -423,7 +423,7 @@ data:
     	'OrderbyField'		=	'@OrderbyField',
     	'WhereClause'		=	'@WhereClause'
     );
-    
+
     CREATE MAPPING ToolsPromptDefsMap
     (
     	'Name'			=	'@Name'		ON INSERT ONLY,
@@ -432,7 +432,7 @@ data:
     	'Value'			=	'@Value',
     	'Type'			=	'@Type'
     );
-    
+
     CREATE MAPPING AlertsConversionsMap
     (
     	'KeyField'		=	'@KeyField'		ON INSERT ONLY,
@@ -440,7 +440,7 @@ data:
     	'Value'			=	'@Value'		ON INSERT ONLY,
     	'Conversion'		=	'@Conversion'
     );
-    
+
     CREATE MAPPING AlertsColVisualsMap
     (
     	'Colname'		=	'@Colname'		ON INSERT ONLY,
@@ -450,7 +450,7 @@ data:
     	'TitleJustify'		=	'@TitleJustify',
     	'DataJustify'		=	'@DataJustify'
     );
-    
+
     CREATE MAPPING AlertsColorsMap
     (
     	'Severity'		=	'@Severity'		ON INSERT ONLY,
@@ -461,7 +461,7 @@ data:
     	'UnackedGreen'		=	'@UnackedGreen',
     	'UnackedBlue'		=	'@UnackedBlue'
     );
-    
+
     ##############################################################################
     # NOTE: If replication of the master.servergroups is is required, uncomment
     # the table mapping definitions below. The associated table replication
@@ -473,7 +473,7 @@ data:
            'GroupID'               =       '@GroupID',
            'Weight'                =       '@Weight'
     );
-    
+
     ##############################################################################
     # TABLES USED BY OOTB EVENT GROUPING - APPEND TO THE END OF THE FILE
     ##############################################################################
@@ -483,7 +483,7 @@ data:
     	'CharValue'		=	'@CharValue',
     	'IntValue'		=	'@IntValue'
     );
-    
+
     CREATE MAPPING MasterCorrelationSiteNameMap
     (
     	'SiteName'		=	'@SiteName'		ON INSERT ONLY,
@@ -497,7 +497,7 @@ data:
             'HighCauseWeight'       =       '@HighCauseWeight',
             'HighCauseText'         =       '@HighCauseText'
     );
-    
+
     CREATE MAPPING MasterCorrelationScopeIDMap
     (
     	'ScopeID'		=	'@ScopeID'		ON INSERT ONLY,
@@ -512,13 +512,13 @@ data:
             'HighCauseWeight'       =       '@HighCauseWeight',
             'HighCauseText'         =       '@HighCauseText'
     );
-    
+
     CREATE MAPPING MasterCorrelationScopeAliasMembersMap
     (
     	'ScopeID'		=	'@ScopeID'		ON INSERT ONLY,
     	'ScopeAlias'		=	'@ScopeAlias'
     );
-    
+
     CREATE MAPPING MasterCorrelationPriorityChildrenMap
     (
     	'Identifier'		=	'@Identifier'		ON INSERT ONLY,
@@ -530,7 +530,7 @@ data:
     	'HighCauseWeight'	=	'@HighCauseWeight',
     	'HighCauseText'		=	'@HighCauseText'
     );
-    
+
     CREATE MAPPING MasterCorrelationScopePolicyMap
     (
     	'PolicyId'		=	'@PolicyId'		ON INSERT ONLY,
@@ -539,7 +539,7 @@ data:
     	'TriggerName'		=	'@TriggerName',
     	'LastRun'		=	'@LastRun'
     );
-    
+
     ###############################################################################
     #
     # Netcool/Impact Related Events Gateway Mapping
@@ -550,7 +550,7 @@ data:
     	'name'			=	'@name'			ON INSERT ONLY,
     	'updates'		=	'@updates'
     );
-    
+
     ###############################################################################
     #
     # Netcool Knowledge Library Field Mapping Definition
@@ -570,7 +570,7 @@ data:
         'LocalRootObj'		=	'@LocalRootObj',
         'LocalObjRelate'		=	'@LocalObjRelate'
     );
-    
+
     CREATE MAPPING NCKL_ADVCORRLPCRCCAND
     (
         'Identifier'		=	'@Identifier'		ON INSERT ONLY,
@@ -585,20 +585,20 @@ data:
         'LocalRootObj'		=	'@LocalRootObj',
         'LocalObjRelate'		=	'@LocalObjRelate'
     );
-    
+
     ###############################################################################
     #
     # CEA Cloud Event Analytics Mapping
     #
     ###############################################################################
-    
+
     CREATE MAPPING CEAProperities
     (
         'Name'                =	'@Name' 			ON INSERT ONLY,
         'CharValue'	          =	'@CharValue',
         'IntValue'            =	'@IntValue'
     );
-    
+
     CREATE MAPPING CEASiteName
     (
         'SiteName'            =	'@SiteName'			ON INSERT ONLY,
@@ -612,7 +612,7 @@ data:
         'HighCauseWeight'     =	'@HighCauseWeight',
         'HighCauseText'       =	'@HighCauseText'
     );
-    
+
     CREATE MAPPING CEACKey
     (
         'CEACorrelationKey'   =	'@CEACorrelationKey'		ON INSERT ONLY,
@@ -627,13 +627,13 @@ data:
         'HighCauseWeight'     =	'@HighCauseWeight',
         'HighCauseText'       =	'@HighCauseText'
     );
-    
+
     CREATE MAPPING CEACKeyAliasMembers
     (
         'CEACorrelationKey'   =	'@CEACorrelationKey'		ON INSERT ONLY,
         'CorrelationKeyAlias' =	'@CorrelationKeyAlias'
     );
-    
+
     CREATE MAPPING CEAPriorityChildren
     (
         'Identifier'          =	'@Identifier'			ON INSERT ONLY,
@@ -645,7 +645,7 @@ data:
         'HighCauseWeight'     =	'@HighCauseWeight',
         'HighCauseText'       =	'@HighCauseText'
     );
-    
+
     ###############################################################################
     #
     # Incident Management Replicaton Definitions. (NOI Datalayer)
@@ -672,7 +672,7 @@ data:
         'IncidentData'       = '@IncidentData',
         'Active'             = '@Active'
     );
-    
+
     CREATE MAPPING NOIIMResources
     (
         'TenantId'           = '@TenantId' ON INSERT ONLY,
@@ -681,7 +681,7 @@ data:
         'Name'               = '@Name' ON INSERT ONLY,
         'StartTime'          = '@StartTime'
     );
-    
+
     CREATE MAPPING NOIIMTimeline
     (
         'TenantId'           = '@TenantId' ON INSERT ONLY,
@@ -698,7 +698,7 @@ data:
         'ResolutionCode'     = '@ResolutionCode',
         'Details'            = '@Details'
     );
-    
+
     CREATE MAPPING NOIIMProperties
     (
         'TenantId'           = '@TenantId' ON INSERT ONLY,
@@ -707,7 +707,7 @@ data:
         'Name'               = '@Name' ON INSERT ONLY,
         'Value'              = '@Value'
     );
-    
+
     ###############################################################################
     #
     # HA on ObjectServer
@@ -723,13 +723,13 @@ data:
     	'LOCKED' 			= '@LOCKED',
     	'STATUS' 			= '@STATUS'
     );
-    
+
     CREATE MAPPING dashhachartpropmap
     (
     	'id1' 				= '@id1' ON INSERT ONLY,
     	'value' 			= '@value'
     );
-    
+
     CREATE MAPPING dashhaconnectionsmap
     (
     	'CONTEXT_ROOT' 		= '@CONTEXT_ROOT',
@@ -745,7 +745,7 @@ data:
     	'NAME' 				= '@NAME' ON INSERT ONLY,
     	'SERVICE_NAME' 		= '@SERVICE_NAME'
     );
-    
+
     CREATE MAPPING dashhaconsoleanalyticsdbaccessmap
     (
     	'PAGEID' 			= '@PAGEID' ON INSERT ONLY,
@@ -755,14 +755,14 @@ data:
     	'INTERNAL_TS' 		= '@INTERNAL_TS',
     	'MODULEREF' 		= '@MODULEREF'
     );
-    
+
     CREATE MAPPING dashhaconsoleanalyticstblnamesmap
     (
     	'INTERNAL_TS' 		= '@INTERNAL_TS',
     	'TABLENAME' 		= '@TABLENAME' ON INSERT ONLY,
     	'TBLSCHEMA' 		= '@TBLSCHEMA'
     );
-    
+
     CREATE MAPPING dashhadatasetsmap
     (
     	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE',
@@ -771,7 +771,7 @@ data:
     	'LABEL' 			= '@LABEL',
     	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhadatasourcesmap
     (
     	'LABEL' 			= '@LABEL',
@@ -779,7 +779,7 @@ data:
     	'WARNAME' 			= '@WARNAME',
     	'TYPE' 				= '@TYPE' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhafederationsmap
     (
     	'LOCATION' 			= '@LOCATION',
@@ -788,13 +788,13 @@ data:
     	'ID1' 				= '@ID1' ON INSERT ONLY,
     	'VIEWMEMBER' 		= '@VIEWMEMBER'
     );
-    
+
     CREATE MAPPING dashhaglobalconfigmap
     (
     	'KEY' 				= '@KEY' ON INSERT ONLY,
     	'VALUE' 			= '@VALUE'
     );
-    
+
     CREATE MAPPING dashhagroupsmap
     (
     	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY,
@@ -804,7 +804,7 @@ data:
     	'DESCRIPTION' 		= '@DESCRIPTION',
     	'RESOURCEBUNDLE' 	= '@RESOURCEBUNDLE'
     );
-    
+
     CREATE MAPPING dashhamodulesmap
     (
     	'VERSION' 			= '@VERSION',
@@ -812,7 +812,7 @@ data:
     	'MODULE_ID' 		= '@MODULE_ID' ON INSERT ONLY,
     	'LAST_UPDATED' 		= '@LAST_UPDATED'
     );
-    
+
     CREATE MAPPING dashhanlresourcesmap
     (
     	'NL_KEY' 			= '@NL_KEY' ON INSERT ONLY,
@@ -820,7 +820,7 @@ data:
     	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE' ON INSERT ONLY,
     	'LOCALE' 			= '@LOCALE' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhanodesstoresmap
     (
     	'NODE_ID' 			= '@NODE_ID',
@@ -828,13 +828,13 @@ data:
     	'STORE_ID' 			= '@STORE_ID',
     	'DUMMI' 			= '@DUMMI' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhapasswdkeysmap
     (
     	'ID1' 				= '@ID1' ON INSERT ONLY,
     	'PASSWORD_KEY' 		= '@PASSWORD_KEY'
     );
-    
+
     CREATE MAPPING dashhaprofilesmap
     (
     	'ATTR_NAME' 		= '@ATTR_NAME',
@@ -845,7 +845,7 @@ data:
     	'LARGE_VALUE' 		= '@LARGE_VALUE',
     	'DUMMI' 			= '@DUMMI' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhaprofimetadatamap
     (
     	'PAGE_ID' 			= '@PAGE_ID',
@@ -854,7 +854,7 @@ data:
     	'DUMMI' 			= '@DUMMI' ON INSERT ONLY,
     	'PAGE_NAME' 		= '@PAGE_NAME'
     );
-    
+
     CREATE MAPPING dashhaprovidersmap
     (
     	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE',
@@ -862,7 +862,7 @@ data:
     	'LABEL' 			= '@LABEL',
     	'DESCRIPTION' 		= '@DESCRIPTION'
     );
-    
+
     CREATE MAPPING dashhasapmuiconmgrmap
     (
     	'NAME' 				= '@NAME' ON INSERT ONLY,
@@ -873,7 +873,7 @@ data:
     	'FIELDNAME' 		= '@FIELDNAME' ON INSERT ONLY,
     	'FIELDORDER' 		= '@FIELDORDER'
     );
-    
+
     CREATE MAPPING dashhastoresmap
     (
     	'NAME' 				= '@NAME',
@@ -882,7 +882,7 @@ data:
     	'STORE_ID' 			= '@STORE_ID',
     	'DATA' 				= '@DATA'
     );
-    
+
     CREATE MAPPING dashhawidgetsmap
     (
     	'LAST_MODIFIED' 	= '@LAST_MODIFIED',
@@ -902,7 +902,7 @@ data:
     	'LAST_MODIFIED_BY' 	= '@LAST_MODIFIED_BY',
     	'SCHEMA_VERSION' 	= '@SCHEMA_VERSION'
     );
-    
+
     CREATE MAPPING dashhawidgetdatasetsmap
     (
     	'WIDGET_ID' 		= '@WIDGET_ID' ON INSERT ONLY,
@@ -911,7 +911,7 @@ data:
     	'WIDGET_VERSION' 	= '@WIDGET_VERSION' ON INSERT ONLY,
     	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhawidgetgroupsmap
     (
     	'DATA_SOURCE_TYPE' 	= '@DATA_SOURCE_TYPE' ON INSERT ONLY,
@@ -920,7 +920,7 @@ data:
     	'GROUP_ID' 			= '@GROUP_ID' ON INSERT ONLY,
     	'WIDGET_VERSION' 	= '@WIDGET_VERSION' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhawidgetschemamap
     (
     	'RESOURCE_BUNDLE' 	= '@RESOURCE_BUNDLE',
@@ -930,13 +930,13 @@ data:
     	'VERSION' 			= '@VERSION' ON INSERT ONLY,
     	'ID1' 				= '@ID1' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING dashhaxmldocumentsmap
     (
     	'XML_DOCUMENT' 		= '@XML_DOCUMENT',
     	'ID1' 				= '@ID1' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING NcwHaConfigItemsMap
     (
     	'Type' 				= '@Type',
@@ -949,7 +949,7 @@ data:
     	'LastUpdated' 		= '@LastUpdated',
     	'LastUpdatedText' 	= '@LastUpdatedText'
     );
-    
+
     CREATE MAPPING NcwHaConfigItemsContentMap
     (
     	'PartNumber' 		= '@PartNumber',
@@ -958,13 +958,13 @@ data:
     	'ConfigItemIdRef' 	= '@ConfigItemIdRef',
     	'Content' 			= '@Content'
     );
-    
+
     CREATE MAPPING NcwHaNodesMap
     (
     	'Uri' 				= '@Uri' ON INSERT ONLY,
     	'NodeId' 			= '@NodeId' ON INSERT ONLY
     );
-    
+
     CREATE MAPPING NcwHaNodesConfigItemsMap
     (
     	'AssociationId' 	= '@AssociationId' ON INSERT ONLY,
@@ -973,7 +973,7 @@ data:
     	'LastUpdatedText' 	= '@LastUpdatedText',
     	'NodeId' 			= '@NodeId'
     );
-    
+
     ###############################################################################
     #
     # WebGUI & WAS OAUTH20 Persistence Service on ObjectServer
@@ -996,7 +996,7 @@ data:
         'REDIRECTURI'       = '@REDIRECTURI',
         'STATEID'           = '@STATEID'
     );
-    
+
     CREATE MAPPING Oauth20ClientConfig
     (
         'COMPONENTID'       = '@COMPONENTID' ON INSERT ONLY,
