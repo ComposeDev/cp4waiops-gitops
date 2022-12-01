@@ -51,6 +51,7 @@ spec:
         mkdir -p $(workspaces.inputoutput.path)/merged
         traverse $(workspaces.inputoutput.path)/$(params.pathfiles) ''
         cat $(workspaces.inputoutput.path)/$(params.pathmanifest)
+        sleep 600
       securityContext:
         runAsUser: 0
   workspaces:
