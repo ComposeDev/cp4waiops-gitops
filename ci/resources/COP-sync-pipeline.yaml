@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: config-generation
+  name: COP-sync-pipeline
 spec:
   params:
     - default: 'https://github.com/ComposeDev/cp4waiops-configuration.git'
