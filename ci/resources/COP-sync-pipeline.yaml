@@ -47,7 +47,7 @@ spec:
       params:
         - name: SCRIPT
           value: |
-            oc rsync -c impactgui --strategy=tar $(workspaces.manifest-dir.path)/configs/guiserver/COP evtmanager-impactgui-0:/space/opview
+            oc rsync -c impactgui --strategy=tar $(workspaces.manifest-dir.path)/configs/guiserver evtmanager-impactgui-0:/space/opview
       runAfter:
         - git-clone-configs
       taskRef:
