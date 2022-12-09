@@ -51,7 +51,7 @@ spec:
       runAfter:
         - git-clone-configs
       taskRef:
-        kind: Task
+        kind: ClusterTask
         name: openshift-client
       workspaces:
         - name: manifest-dir
