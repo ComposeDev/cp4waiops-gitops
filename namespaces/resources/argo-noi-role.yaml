@@ -8,5 +8,19 @@ rules:
     apiGroups:
       - noi.ibm.com
       - tekton.dev
+      - cert-manager.io
     resources:
       - '*'
+  - verbs:
+      - create
+      - delete
+    apiGroups:
+      - ""
+    resources:
+      - services
+  - verbs:
+      - '*'
+    apiGroups:
+      - apps
+    resources:
+      - deployments
