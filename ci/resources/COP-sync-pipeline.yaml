@@ -54,5 +54,8 @@ spec:
         kind: Task
         name: openshift-client
       workspaces:
-        - name: inputoutput
+        - name: manifest-dir
           workspace: git
+  workspaces:
+    - name: git
+    - name: basic-auth
