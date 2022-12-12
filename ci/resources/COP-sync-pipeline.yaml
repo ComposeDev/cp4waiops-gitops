@@ -71,8 +71,8 @@ spec:
             oc cp -n mariadb $(workspaces.manifest-dir.path)/configs/mariadb/COP/dem.correlate.mysql.v50.sql $POD:/tmp
             oc rsh -n mariadb $POD bash -c 'mysql -u root < /tmp/dem.mysql.v50.sql'
             oc rsh -n mariadb $POD bash -c 'mysql -u root < /tmp/dem.correlate.mysql.v50.sql'
-            oc rsh -n mariadb $POD bash -c 'mysql -u root -e "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"'
-            oc rsh -n mariadb $POD bash -c 'mysql -u root -e "GRANT ALL ON *.* TO root@localhost IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"'            
+            oc rsh -n mariadb $POD bash -c 'mysql -u root -e "GRANT ALL ON *.* TO root@\'%\' IDENTIFIED BY \'$MYSQL_ROOT_PASSWORD\';"'
+            oc rsh -n mariadb $POD bash -c 'mysql -u root -e "GRANT ALL ON *.* TO root@localhost IDENTIFIED BY \'$MYSQL_ROOT_PASSWORD\';"'            
         - name: VERSION
           value: latest
       workspaces:
