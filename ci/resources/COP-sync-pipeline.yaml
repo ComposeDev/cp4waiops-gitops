@@ -67,7 +67,8 @@ spec:
         - name: SCRIPT
           value: |
             POD=`oc get pods -n mariadb -o jsonpath='{.items[0].metadata.name}' -l app=mariadb`
-            oc rsync -n mariadb --strategy=rsync $(workspaces.manifest-dir.path)/configs/mariadb/COP $POD:/tmp
+            oc cp -n mariadb $(workspaces.manifest-dir.path)/configs/mariadb/COP/dem.mysql.v50.sql $POD:/tmp
+            oc cp -n mariadb $(workspaces.manifest-dir.path)/configs/mariadb/COP/dem.correlate.mysql.v50.sql $POD:/tmp
             oc rsh -n mariadb $POD mysql -u root < /tmp/dem.mysql.v50.sql
             oc rsh -n mariadb $POD mysql -u root < /tmp/dem.correlate.mysql.v50.sql
         - name: VERSION
