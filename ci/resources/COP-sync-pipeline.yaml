@@ -79,7 +79,8 @@ spec:
         - name: manifest-dir
           workspace: git
     - name: impact-config
-      runAfter: git-clone-configs
+      runAfter:
+        - git-clone-configs
       taskRef:
         kind: ClusterTask
         name: openshift-client
