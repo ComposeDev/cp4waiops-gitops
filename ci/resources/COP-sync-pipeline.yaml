@@ -88,7 +88,7 @@ spec:
         - name: SCRIPT
           value: |
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'mkdir -p -m 775 /home/netcool/dem-polices/DataSources'
-            oc rsync -c nciserver --strategy=tar $(workspaces.manifest-dir.path)/configs/nci/model evtmanager-nciserver-0:/home/netcool/dem-polices
+            oc rsync -c nciserver --strategy=tar $(workspaces.manifest-dir.path)/configs/nci/model/ evtmanager-nciserver-0:/home/netcool/
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'sed -i 's/\[DBPASSWORD\]/test123/g' /home/netcool/dem-polices/DataSources/DS-CC_DEM-MySQL.ds'
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'sed -i 's/\[PRIMARYHOST\]/test.test.com/g' /home/netcool/dem-polices/DataSources/DS-CC_DEM-MySQL.ds'
         - name: VERSION
