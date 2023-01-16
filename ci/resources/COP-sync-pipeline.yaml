@@ -89,7 +89,7 @@ spec:
           value: |
             #oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'mkdir -p -m 775 /home/netcool/dem-policies/DataSources'
             oc rsync -c nciserver --strategy=tar $(workspaces.manifest-dir.path)/configs/nci/model/ evtmanager-nciserver-0:/home/netcool/
-            oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c "encpasswd=`/opt/IBM/tivoli/impact/bin/nci_crypt test123`"
+            oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'encpasswd=`/opt/IBM/tivoli/impact/bin/nci_crypt test123`'
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'sed -i "s/\[DBPASSWORD\]/$encpasswd/g" /home/netcool/dem-policies/DataSources/DS-CC_DEM-MySQL.ds'
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c "sed -i 's/\[PRIMARYHOST\]/test.test.com/g' /home/netcool/dem-policies/DataSources/DS-CC_DEM-MySQL.ds"
         - name: VERSION
