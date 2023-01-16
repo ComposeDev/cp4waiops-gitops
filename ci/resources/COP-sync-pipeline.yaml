@@ -91,6 +91,7 @@ spec:
             oc rsync -c nciserver --strategy=tar $(workspaces.manifest-dir.path)/configs/nci/model/ evtmanager-nciserver-0:/home/netcool/
             #oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'set -x; export encpasswd=`/opt/IBM/tivoli/impact/bin/nci_crypt test123`'
             #oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'set -x; echo $encpasswd'
+            oc rsync -c nciserver --strategy=tar $(workspaces.manifest-dir.path)/configs/nci/mysql-connector-java-5.1.22-bin.jar evtmanager-nciserver-0:/opt/IBM/tivoli/impact/dsalib
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'sed -i "s/\[DBPASSWORD\]/$(/opt/IBM/tivoli/impact/bin/nci_crypt C0mp0se\!)/g" /home/netcool/dem-policies/DataSources/DS-CC_DEM-MySQL.ds'
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c "sed -i 's/\[PRIMARYHOST\]/mariadb.mariadb.svc.cluster.local/g' /home/netcool/dem-policies/DataSources/DS-CC_DEM-MySQL.ds"
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'set -x; /opt/IBM/tivoli/impact/bin/nci_version_control NCI_0 uncoall ""'
