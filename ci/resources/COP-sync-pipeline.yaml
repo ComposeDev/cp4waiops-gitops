@@ -75,7 +75,7 @@ spec:
             oc rsh -n mariadb $POD bash -c "mysql -u root -e \"GRANT ALL ON *.* TO root@localhost;\""
             oc rsh -n mariadb $POD bash -c "mysql -u root -e \"DELETE FROM mysql.user WHERE user='';\""
             oc rsh -n mariadb $POD bash -c "mysql -u root -e \"DROP DATABASE test;\""
-            oc rsh -n mariadb $POD bash -c "mysql -u root -e \"DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';\""
+            oc rsh -n mariadb $POD bash -c "set -x;mysql -u root -e \"DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';\""
             oc rsh -n mariadb $POD bash -c "mysql -u root -e \"FLUSH PRIVILEGES;\""
         - name: VERSION
           value: latest
