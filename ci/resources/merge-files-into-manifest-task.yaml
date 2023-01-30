@@ -44,14 +44,14 @@ spec:
             yq -i 'del('$yamlpath')' $(workspaces.inputoutput.path)/$(params.pathmanifest)
             yq -i $yamlpath' = load_str("$(workspaces.inputoutput.path)/merged/'$mergedfile'")' $(workspaces.inputoutput.path)/$(params.pathmanifest) 
           else
-            set -x; rm $(workspaces.inputoutput.path)/merged/$mergedfile
+            set -x; rm -f $(workspaces.inputoutput.path)/merged/$mergedfile
           fi
         }
 
         mkdir -p $(workspaces.inputoutput.path)/merged
         traverse $(workspaces.inputoutput.path)/$(params.pathfiles) ''
         cat $(workspaces.inputoutput.path)/$(params.pathmanifest)
-        sleep 600
+        #sleep 600
       securityContext:
         runAsUser: 0
   workspaces:
