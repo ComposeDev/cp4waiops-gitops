@@ -6,8 +6,541 @@ metadata:
 data:
   agg-p-props-append: |
     Connections: 256
-  agg-p-sql-extensions: |
+  agg-p-sql-extensions: |-
     create database mydb;
     go
     ALTER TABLE alerts.status ADD new_column VARCHAR(50);
     GO
+
+    --- Usage:
+    --- nco_sql -server NCOMS -user root -password xxx < filename
+
+    --- Dynamic Event Management
+    ALTER TABLE alerts.status ADD COLUMN Source VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN SubSource VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ShowFor INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN EventDelay INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN KPI VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN SLA VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN DutyEvent INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN SupportGroup VARCHAR(64);
+    go
+    ALTER TABLE alerts.status ADD COLUMN SupportType VARCHAR(64);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ObjectType VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ObjectInstance VARCHAR(64);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ServiceAffecting INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN eMail INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN SMS INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN TimeWindow INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN TimeThreshold INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN ImpactFlag1 INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN PolicyLog VARCHAR(128);
+    go
+    ALTER TABLE alerts.status ADD COLUMN Escalate INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN OperationProfile VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN Classified INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Automation INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN AutomationScenario VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ReclassType VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ReclassRule INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN ReclassMin INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN KbId INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN DutyGroupId INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN RuleID INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Action1 INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Action2 INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Action3 INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Action4 INTEGER;
+    go
+
+    --- Additional Support Fields
+    --- ALTER TABLE alerts.status ADD COLUMN SupportSubType VARCHAR(32);
+    --- go
+    --- ALTER TABLE alerts.status ADD COLUMN SupportModule VARCHAR(32);
+    --- go
+    --- ALTER TABLE alerts.status ADD COLUMN SupportTemplate VARCHAR(32);
+    --- go
+    --- ALTER TABLE alerts.status ADD COLUMN SupportError VARCHAR(32);
+    --- go
+    --- ALTER TABLE alerts.status ADD COLUMN SupportSubModule VARCHAR(32);
+    --- go
+
+    --- Suppression
+    ALTER TABLE alerts.status ADD COLUMN ChangeId VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN MaintStart UTC;
+    go
+    ALTER TABLE alerts.status ADD COLUMN MaintStop UTC;
+    go
+    ALTER TABLE alerts.status ADD COLUMN SuppressDuration INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN SuppressStart UTC;
+    go
+    ALTER TABLE alerts.status ADD COLUMN GroupKey VARCHAR(255);
+    go
+    ALTER TABLE alerts.status ADD COLUMN GroupName VARCHAR(255);
+    go
+
+    --- Ticket Management
+    ALTER TABLE alerts.status ADD COLUMN TTStatus INTEGER;
+    go
+    ALTER TABLE alerts.status ADD COLUMN TTId VARCHAR(64);
+    go
+    ALTER TABLE alerts.status ADD COLUMN TTTime UTC;
+    go
+
+    --- Information
+    ALTER TABLE alerts.status ADD COLUMN NodeName VARCHAR(64);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ProdStatus VARCHAR(32);
+    go
+    ALTER TABLE alerts.status ADD COLUMN ExtSummary VARCHAR(4096);
+    go
+    ALTER TABLE alerts.status ADD COLUMN AckTime UTC;
+    go
+    ALTER TABLE alerts.status ADD COLUMN ClearTime UTC;
+    go
+    ALTER TABLE alerts.status ADD COLUMN Duration INTEGER;
+    goCREATE OR REPLACE TRIGGER GROUP CC;
+    go
+
+    CREATE OR REPLACE TRIGGER DEM_Escalate
+    GROUP CC
+    ENABLED TRUE
+    PRIORITY 1
+    COMMENT 'Temporal Trigger for Escalate'
+    EVERY 1 MINUTES
+    BEGIN
+    update alerts.status set Escalate=0 where ((FirstOccurrence+(Escalate*60)) <= getdate()) AND Acknowledged=0 AND Escalate !=0;
+    END;
+    go
+
+    CREATE OR REPLACE TRIGGER DEM_EventDelay
+    GROUP CC
+    ENABLED TRUE
+    PRIORITY 1
+    COMMENT 'Temporal Trigger for Clearing Event Delay'
+    EVERY 1 MINUTES
+    BEGIN
+    update alerts.status set EventDelay=0 where ((FirstOccurrence+(EventDelay*60)) <= getdate()) AND EventDelay !=0;
+    END;
+    go
+
+    -- DEM version 4
+    CREATE OR REPLACE TRIGGER DEM_ReclassMin
+    GROUP CC
+    ENABLED TRUE
+    PRIORITY 1
+    COMMENT 'Temporal Trigger for fire Reclassification'
+    EVERY 1 MINUTES
+    BEGIN
+    update alerts.status set ReclassMin=0 where ReclassType='Minutes' AND ((FirstOccurrence+(ReclassMin*60)) <= getdate()) AND ReclassMin !=0;
+    END;
+    go
+
+    --- Trigger for SuppressDuration
+    create or replace trigger Omnibus_SuppressDuration
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Calculates Suppress Duration'
+    BEFORE UPDATE
+    ON alerts.status
+    FOR EACH ROW
+    WHEN new.SuppressEscl!=old.SuppressEscl
+    begin
+    -- Set starttime for Suppression
+    if (new.SuppressEscl>=4)
+    then
+    	set new.SuppressStart=getdate();
+    end if;
+
+    -- Calculate SuppressDuration
+    if (new.SuppressEscl=0)
+    then
+    	set new.SuppressDuration=(getdate()-old.SuppressStart)+old.SuppressDuration;
+    end if;
+    end;
+    go
+
+    --- Triggers for ClearTime and Duration
+    create or replace trigger Omnibus_ClearTime_DELETE
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Set ClearTime and Duration on Deletes'
+    BEFORE DELETE
+    ON alerts.status
+    FOR EACH ROW
+    begin
+    if (old.Severity>0) then
+    	update alerts.status set ClearTime = getdate(), Duration = (getdate() - old.FirstOccurrence), Severity=0 WHERE Serial=old.Serial;
+    	cancel;
+    end if;
+    end;
+    go
+
+    create or replace trigger Omnibus_ClearTime_REINSERT
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Set ClearTime and Duration on Reinserts'
+    BEFORE REINSERT
+    ON alerts.status
+    FOR EACH ROW
+    begin
+    if(new.Severity = 0 and old.Severity > 0) then
+    	set old.ClearTime = getdate();
+    	set old.Duration = getdate() - old.FirstOccurrence;
+    end if;
+    end;
+    go
+
+    create or replace trigger Omnibus_ClearTime_UPDATE
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Set ClearTime and Duration on Updates'
+    BEFORE UPDATE
+    ON alerts.status
+    FOR EACH ROW
+    begin
+    if(new.Severity = 0 and old.Severity > 0) then
+    	set new.ClearTime = getdate();
+    	set new.Duration = getdate() - old.FirstOccurrence;
+    end if;
+    end;
+    go
+
+    --- Trigger for Acknowledge Time
+    create or replace trigger Omnibus_AckTime
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Set Acknowledge time'
+    BEFORE UPDATE
+    ON alerts.status
+    FOR EACH ROW
+    begin
+    if(old.Acknowledged = 0 and new.Acknowledged = 1) then
+    	set new.AckTime = getdate();
+    end if;
+    end;
+    go
+
+    --- Event Grouping
+    create or replace trigger Omnibus_GroupAlarm_Action
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Event Grouping'
+    BEFORE UPDATE
+    ON alerts.status
+    FOR EACH ROW
+    declare
+    tid integer
+    begin
+    set tid = getdate();
+
+    if (new.GroupName='AddToGroup')
+    then
+    for each row parent in alerts.status where parent.Identifier=new.GroupKey and parent.Severity > 1
+    begin
+    	set new.GroupName=parent.NodeName;
+    end
+    elseif (old.GroupKey = '' and  new.GroupKey != '')
+    then
+
+    	set new.GroupKey = new.GroupKey + to_char(tid);
+    	insert into alerts.status (Severity, Identifier, Summary, Type, Class, GroupKey, FirstOccurrence, LastOccurrence, OwnerUID, SupportGroup,ShowFor) values (2, new.GroupKey, 'GROUP ALERT', 1, 90000, 'PARENT', tid, tid,65534, old.SupportGroup,8);
+    end if;
+    end
+    go
+
+    create or replace trigger Omnibus_GroupAlarm_ClearChildren
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Event Grouping'
+    BEFORE UPDATE
+    ON alerts.status
+    FOR EACH ROW
+    declare
+    tid integer
+    begin
+    if (old.Severity > 0 and new.Severity = 0 and old.Class = 90000)
+    then
+    	for each row child in alerts.status where child.GroupKey = old.Identifier
+    	begin
+    		set child.Severity = new.Severity;
+    	end;
+    end if;
+    end
+    go
+
+    CREATE OR REPLACE TRIGGER Omnibus_GroupAlarm_Correlate
+    GROUP CC
+    ENABLED TRUE
+    PRIORITY 1
+    COMMENT 'Temporal Trigger for group alarm correlation'
+    EVERY 30 SECONDS
+    declare
+    critical int;
+    major int;
+    minor int;
+    information int;
+    nod char(64);
+    pnodename char(64);
+    noderow char(255);
+    mnode int;
+    loccuran int;
+    shfr int;
+    kpi char(64);
+    kpi_val int;
+    begin
+    for each row parent in alerts.status where parent.GroupKey = 'PARENT' and parent.Severity > 1
+    begin
+    set information=0;
+    set minor = 0;
+    set major = 0;
+    set critical = 0;
+    set nod = '';
+    set noderow= '';
+    set mnode = 0;
+    set loccuran = 0;
+    set shfr = 0;
+    set kpi = '';
+    set kpi_val = 0;
+
+    	for each row child in alerts.status where child.GroupKey = parent.Identifier
+    	begin
+    		if(kpi = '') then
+    			if(child.KPI='' and kpi_val = 0 ) then
+    			 	set kpi_val=0;
+    			end if;
+    			if(child.KPI='Availability' and kpi_val < 4) then
+    				set kpi_val=4;
+    			end if;
+    			if(child.KPI='Performance' and kpi_val < 3) then
+    				set kpi_val=3;
+    			end if;
+    			if(child.KPI='Capacity' and kpi_val < 2) then
+    				set kpi_val=2;
+    			end if;
+    			if(child.KPI='Event' and kpi_val < 1) then
+    				set kpi_val=1;
+    			end if;
+
+    		end if;
+    		if (nod != '') then
+    			if (nod != child.NodeName) then
+    				set noderow = noderow+', '+child.NodeName;
+    				set mnode = 1;
+    				set nod = child.NodeName;
+    			end if;
+    		else
+    			set nod = child.NodeName;
+    			set noderow = child.NodeName;
+    			set pnodename = child.GroupName;
+    		end if;
+
+    		if (shfr < child.ShowFor) then
+    			set shfr = child.ShowFor;
+    		end if;
+    		if (loccuran < child.LastOccurrence) then
+    			set loccuran = child.LastOccurrence;
+    		end if;
+
+    		if(child.Severity = 5) then
+    			set critical = critical +1;
+
+    		end if;
+
+    		if(child.Severity = 4) then
+    			set major = major +1;
+    		end if;
+
+    		if(child.Severity = 3) then
+
+    			set minor = minor +1;
+    		end if;
+    		if(child.Severity = 2) then
+
+    			set information = information +1;
+    		end if;
+
+    	end;
+    	set parent.Tally = minor+major+critical+information;
+    	set parent.LastOccurrence = loccuran;
+    	set parent.ShowFor = shfr;
+    	set parent.NodeName = pnodename;
+
+    	set parent.Summary = 'GROUP ALERT:Critical:('+to_char(critical)+'):'+'Major:('+to_char(major)+'):'+'Minor:('+to_char(minor)+'):'+'Information:('+to_char(information)+')';
+    	if (mnode = 1) then
+    		set parent.Summary = parent.Summary + ' Nodes: '+ noderow;
+    		set parent.NodeName = pnodename;
+    	end if;
+
+    	if(critical > 0) then
+    		set parent.Severity = 5;
+    	elseif (major > 0) then
+    		set parent.Severity = 4;
+    	elseif (minor > 0) then
+    		set parent.Severity = 3;
+    	elseif (information > 0) then
+    		set parent.Severity = 2;
+    	else
+    		set parent.Severity = 2;
+
+    	end if;
+    	if(kpi_val = 4) then
+    		set parent.KPI = 'Availability';
+    	end if;
+    	if(kpi_val = 3) then
+    		set parent.KPI = 'Performance';
+    	end if;
+    	if(kpi_val = 2) then
+    		set parent.KPI = 'Capacity';
+    	end if;
+    	if(kpi_val = 1) then
+    		set parent.KPI = 'Event';
+    	end if;
+    	if(kpi_val = 0) then
+    		set parent.KPI = '';
+    	end if;
+    	if (parent.Tally = 0) then
+    		set parent.Severity = 0;
+    	end if;
+
+    end;
+    end
+    go
+
+    --- Triggers for Maintenance
+    CREATE OR REPLACE TRIGGER Omnibus_Maintenance_SuppressCheck
+    GROUP CC
+    ENABLED TRUE
+    PRIORITY 1
+    COMMENT 'Temporal Trigger for Clearing Maintenance'
+    EVERY 1 MINUTES
+    BEGIN
+    update alerts.status set SuppressEscl=0, Acknowledged=0 where SuppressEscl=6 and MaintStop < getdate() and MaintStop > 0;
+    END;
+    go
+
+    --- Trigger for EventId on MOSWOS Events
+    create or replace trigger Omnibus_MOSWOS_Events
+    group CC
+    debug false
+    enabled true
+    priority 1
+    comment 'Set EventId on MOSWOS Events and fix OwnerUID and OwnerGID'
+    BEFORE INSERT
+    ON alerts.status
+    FOR EACH ROW
+    begin
+    -- Netcool Impact Events
+    if (new.AlertGroup='ImpactStatus' or new.Agent='Impact SelfMonitoring')
+    then
+    	set new.OwnerUID=65534;
+    	set new.Source='Netcool';
+    	if (new.EventId='' and new.Agent='Impact SelfMonitoring')
+    	then
+    		set new.EventId=new.AlertGroup;
+    	end if;
+    	if (new.Severity=1)
+    	then
+    		set new.Severity=2;
+    	end if;
+    end if;
+
+    -- Netcool Omnibus Events
+    if (new.Manager in ('SystemWatch','ConnectionWatch','SecurityWatch'))
+    then
+    	set new.Source='Netcool';
+    	if (new.EventId = '') then
+    		if (new.Summary like 'process running') then
+    			set new.EventId = 'ConnectionWatch';
+    		elseif (new.Summary like 'Attempt to login') then
+    			set new.EventId = 'LoginFail';
+    		elseif (new.Summary like 'process mttrapd') then
+    			set new.EventId = 'ProbeMttrapdConnection';
+    		elseif (new.Summary like 'process syslog') then
+    			set new.EventId = 'ProbeSyslogConnection';
+    		elseif (new.Summary like 'process tivoli_eif') then
+    			set new.EventId = 'ProbeTivoliEIFConnection';
+    		elseif (new.Summary like 'Gateway resynchronisation') then
+    			set new.EventId = 'GatewayResynchronisation';
+    		else
+    			set new.EventId = new.Summary;
+    		end if;
+    	end if;
+    end if;
+
+    if (new.Manager = 'ProbeWatch')
+    then
+    	set new.Source='Netcool';
+
+    	if (new.Summary like 'Probe Switched to master') then
+    		set new.EventId = 'ProbeSwitchedToMaster';
+    	elseif (new.Summary like 'Probe Switched to slave') then
+    		set new.EventId = 'ProbeSwitchedToSlave';
+    	elseif (new.Summary like 'SIGHUP failed') then
+    		set new.EventId = 'RuleFileSyntaxError';
+    	elseif (new.Summary like 'SIGHUP successful') then
+    		set new.EventId = 'RuleFileSyntaxOK';
+    	elseif (new.Summary like 'Probe Heartbeat') then
+    		set new.EventId = 'ProbeHeartbeat';
+    	else
+    		set new.EventId = new.Manager + ' - ' + new.Agent;
+    	end if;
+
+    	if (new.OwnerGID = 1)
+    	then
+    		set new.OwnerGID = 0;
+    	end if
+    end if;
+
+    if (new.Manager like 'OMNIbus Self' and new.EventId='') then
+    	set new.Source='Netcool';
+    	set new.EventId = new.AlertGroup;
+    end if;
+    end
+    go
