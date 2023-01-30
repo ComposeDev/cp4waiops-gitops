@@ -100,6 +100,7 @@ spec:
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c "sed -i 's/\[PRIMARYHOST\]/mariadb.mariadb.svc.cluster.local/g' /home/netcool/dem-policies/DataSources/DS-CC_DEM-MySQL.ds"
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'set -x; /opt/IBM/tivoli/impact/bin/nci_version_control NCI_0 uncoall ""'
             oc rsh -n noi -c nciserver evtmanager-nciserver-0 bash -c 'set -x; /opt/IBM/tivoli/impact/bin/nci_import NCI_0 /home/netcool/dem-policies'
+            oc rsh -n noi -c impactgui evtmanager-impactgui-0 bash -c 'set -x; grep WOFF /opt/IBM/tivoli/impact/wlp/usr/servers/ImpactUI/server.xml || sed -i "/.*><server>.*/a <mimeTypes><type>WOFF=application/font-woff</type><type>woff=application/font-woff</type><type>WOFF2=application/font-woff2</type><type>woff2=application/font-woff2</type></mimeTypes>" /opt/IBM/tivoli/impact/wlp/usr/servers/ImpactUI/server.xml'
         - name: VERSION
           value: latest
       workspaces:
