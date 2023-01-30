@@ -44,7 +44,7 @@ spec:
             yq -i 'del('$yamlpath')' $(workspaces.inputoutput.path)/$(params.pathmanifest)
             yq -i $yamlpath' = load_str("$(workspaces.inputoutput.path)/merged/'$mergedfile'")' $(workspaces.inputoutput.path)/$(params.pathmanifest) 
           else
-            rm $(workspaces.inputoutput.path)/merged/$mergedfile
+            set -x; rm $(workspaces.inputoutput.path)/merged/$mergedfile
           fi
         }
 
