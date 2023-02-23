@@ -20,10 +20,12 @@ spec:
     global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
-  version: 1.6.6
+  version: 1.6.7
   entitlementSecret: ibm-entitlement-key
   clusterDomain: apps.aiops.is.compose.se
   persistence:
+    storageClassMinio: 'vsphere-sc'
+    storageSizeMinio: 50Gi
     storageSizeNCOBackup: 5Gi
     enabled: true
     storageSizeNCOPrimary: 5Gi
