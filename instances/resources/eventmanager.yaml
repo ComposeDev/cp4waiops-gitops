@@ -20,7 +20,7 @@ spec:
     global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
-  version: 1.6.7
+  version: 1.6.8
   entitlementSecret: ibm-entitlement-key
   clusterDomain: apps.aiops.is.compose.se
   persistence:
@@ -57,32 +57,38 @@ spec:
     appDisco:
       enabled: false
     observers:
-      docker: true
-      taddm: false
-      servicenow: false
-      ibmcloud: true
       alm: false
-      contrail: false
-      cienablueplanet: false
-      kubernetes: true
-      bigfixinventory: false
-      junipercso: false
-      dns: true
-      itnm: true
       ansibleawx: false
-      ciscoaci: false
-      azure: false
-      rancher: false
-      newrelic: false
-      vmvcenter: true
-      rest: true
-      appdynamics: false
-      jenkins: false
-      zabbix: false
-      file: true
-      googlecloud: false
-      dynatrace: false
+      appdynamics: true
       aws: false
+      azure: true
+      bigcloudfabric: false
+      bigfixinventory: false
+      cienablueplanet: false
+      ciscoaci: false
+      contrail: false
+      dns: true
+      docker: true
+      dynatrace: false
+      file: true
+      gitlab: false
+      googlecloud: false
+      hpnfvd: false
+      ibmcloud: false
+      itnm: true
+      jenkins: false
+      junipercso: false
+      kubernetes: true
+      newrelic: false
       openstack: false
+      rancher: false
+      rest: true
+      sdconap: false
+      servicenow: true
+      sevone: true
+      taddm: false
+      viptela: false
+      vmvcenter: true
       vmwarensx: false
+      zabbix: false
     netDisco: false
