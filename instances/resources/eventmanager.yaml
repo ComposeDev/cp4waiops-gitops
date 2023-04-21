@@ -12,6 +12,9 @@ spec:
     antiAffinity: false
     imagePullPolicy: IfNotPresent
     imagePullRepository: cp.icr.io/cp/noi
+  serviceContinuity:
+    continuousAnalyticsCorrelation: false
+    isBackupDeployment: false
   ldap:
     mode: standalone
     storageSize: 1Gi
@@ -52,6 +55,7 @@ spec:
     storageClassElasticTopology: 'vsphere-sc'
     storageSizeElasticTopology: 75Gi
     storageSizeFileObserver: 5Gi
+    storageSizeSdconapObserver: 5Gi
     storageClassFileObserver: 'vsphere-sc'
     iafCartridgeRequirementsName: ''
     appDisco:
