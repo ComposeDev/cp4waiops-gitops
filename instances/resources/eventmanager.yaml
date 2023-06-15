@@ -18,45 +18,45 @@ spec:
   ldap:
     mode: standalone
     storageSize: 1Gi
-    storageClass: 'vsphere-sc'
+    storageClass: 'lvms-vg1'
   helmValuesNOI:
     global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
   version: 1.6.8
   entitlementSecret: ibm-entitlement-key
-  clusterDomain: apps.aiops.is.compose.se
+  clusterDomain: apps.k8s.is.compose.se
   persistence:
-    storageClassMinio: 'vsphere-sc'
+    storageClassMinio: 'lvms-vg1'
     storageSizeMinio: 50Gi
     storageSizeNCOBackup: 5Gi
     enabled: true
     storageSizeNCOPrimary: 5Gi
-    storageClassNCOPrimary: 'vsphere-sc'
+    storageClassNCOPrimary: 'lvms-vg1'
     storageSizeImpactServer: 5Gi
-    storageClassImpactServer: 'vsphere-sc'
-    storageClassKafka: 'vsphere-sc'
+    storageClassImpactServer: 'lvms-vg1'
+    storageClassKafka: 'lvms-vg1'
     storageSizeKafka: 50Gi
-    storageClassCassandraBackup: 'vsphere-sc'
+    storageClassCassandraBackup: 'lvms-vg1'
     storageSizeCassandraBackup: 50Gi
-    storageClassZookeeper: 'vsphere-sc'
-    storageClassCouchdb: 'vsphere-sc'
+    storageClassZookeeper: 'lvms-vg1'
+    storageClassCouchdb: 'lvms-vg1'
     storageSizeZookeeper: 5Gi
     storageSizeCouchdb: 20Gi
-    storageClassCassandraData: 'vsphere-sc'
+    storageClassCassandraData: 'lvms-vg1'
     storageSizeCassandraData: 50Gi
-    storageClassElastic: 'vsphere-sc'
-    storageClassImpactGUI: 'vsphere-sc'
+    storageClassElastic: 'lvms-vg1'
+    storageClassImpactGUI: 'lvms-vg1'
     storageSizeImpactGUI: 5Gi
     storageSizeElastic: 75Gi
-    storageClassNCOBackup: 'vsphere-sc'
+    storageClassNCOBackup: 'lvms-vg1'
   deploymentType: trial
   topology:
-    storageClassElasticTopology: 'vsphere-sc'
+    storageClassElasticTopology: 'lvms-vg1'
     storageSizeElasticTopology: 75Gi
     storageSizeFileObserver: 5Gi
     storageSizeSdconapObserver: 5Gi
-    storageClassFileObserver: 'vsphere-sc'
+    storageClassFileObserver: 'lvms-vg1'
     iafCartridgeRequirementsName: ''
     appDisco:
       enabled: false

@@ -9,5 +9,5 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: vsphere-sc
+  storageClassName: lvms-vg1
   volumeMode: Filesystem
