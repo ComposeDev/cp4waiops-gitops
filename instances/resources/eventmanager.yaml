@@ -18,45 +18,55 @@ spec:
   ldap:
     mode: standalone
     storageSize: 1Gi
-    storageClass: 'lvms-vg1'
+    storageClass: 'vsphere-sc'
   helmValuesNOI:
     global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
-  version: 1.6.8
+  version: 1.6.9
   entitlementSecret: ibm-entitlement-key
-  clusterDomain: apps.k8s.is.compose.se
+  clusterDomain: apps.aiops.is.compose.se
   persistence:
-    storageClassMinio: 'lvms-vg1'
+    storageClassMinio: 'vsphere-sc'
     storageSizeMinio: 50Gi
     storageSizeNCOBackup: 5Gi
     enabled: true
     storageSizeNCOPrimary: 5Gi
-    storageClassNCOPrimary: 'lvms-vg1'
+    storageClassNCOPrimary: 'vsphere-sc'
     storageSizeImpactServer: 5Gi
-    storageClassImpactServer: 'lvms-vg1'
-    storageClassKafka: 'lvms-vg1'
+    storageClassImpactServer: 'vsphere-sc'
+    storageClassKafka: 'vsphere-sc'
     storageSizeKafka: 50Gi
-    storageClassCassandraBackup: 'lvms-vg1'
+    storageClassCassandraBackup: 'vsphere-sc'
     storageSizeCassandraBackup: 50Gi
-    storageClassZookeeper: 'lvms-vg1'
-    storageClassCouchdb: 'lvms-vg1'
+    storageClassZookeeper: 'vsphere-sc'
+    storageClassCouchdb: 'vsphere-sc'
     storageSizeZookeeper: 5Gi
     storageSizeCouchdb: 20Gi
-    storageClassCassandraData: 'lvms-vg1'
+    storageClassCassandraData: 'vsphere-sc'
     storageSizeCassandraData: 50Gi
-    storageClassElastic: 'lvms-vg1'
-    storageClassImpactGUI: 'lvms-vg1'
+    storageClassElastic: 'vsphere-sc'
+    storageClassImpactGUI: 'vsphere-sc'
     storageSizeImpactGUI: 5Gi
     storageSizeElastic: 75Gi
-    storageClassNCOBackup: 'lvms-vg1'
+    storageClassNCOBackup: 'vsphere-sc'
+    storageClassPostgresql: 'vsphere-sc'
+    storageSizePostgresql: 100Gi
+    storageClassPostgresqlWal: 'vsphere-sc'
+    storageSizePostgresqlWal: 100Gi
+    storageClassSharedSpark: 'vsphere-sc'
+    storageSizeSharedSpark: 100Gi
+  postgresql:
+    edbPostgresImage: cp.icr.io/cp/cpd/postgresql:13.8@sha256:91a88a30e9cd2dd5e5d1e8cfb588b12e3852939f777b9e9ddc6657d3bbc10367
+    edbPostgresLicenseImage: cp.icr.io/cp/cpd/edb-postgres-license-provider@sha256:fd8339c382e1c5d69184d9c3f299a3da5c9a12a579e0db5e76e86d65be9190fd
+    edbPostgresSubscriptionName: cloud-native-postgresql-catalog-subscription
   deploymentType: trial
   topology:
-    storageClassElasticTopology: 'lvms-vg1'
+    storageClassElasticTopology: 'vsphere-sc'
     storageSizeElasticTopology: 75Gi
     storageSizeFileObserver: 5Gi
     storageSizeSdconapObserver: 5Gi
-    storageClassFileObserver: 'lvms-vg1'
+    storageClassFileObserver: 'vsphere-sc'
     iafCartridgeRequirementsName: ''
     appDisco:
       enabled: false
