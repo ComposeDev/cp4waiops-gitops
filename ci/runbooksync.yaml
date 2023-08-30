@@ -8,7 +8,7 @@ spec:
   source:
     path: tekton
     repoURL: https://github.com/thomas-mattsson/node-noi-runbook-sync.git
-    targetRevision: main
+    targetRevision: k8s
   destination:
     namespace: noi
     server: https://kubernetes.default.svc

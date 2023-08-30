@@ -18,7 +18,7 @@ spec:
   ldap:
     mode: standalone
     storageSize: 1Gi
-    storageClass: 'vsphere-sc'
+    storageClass: 'ocs-storagecluster-cephfs'
   helmValuesNOI:
     global.service.nodePort.enable: true
   backupRestore:
@@ -27,34 +27,34 @@ spec:
   entitlementSecret: ibm-entitlement-key
   clusterDomain: apps.aiops.is.compose.se
   persistence:
-    storageClassMinio: 'vsphere-sc'
+    storageClassMinio: 'ocs-storagecluster-cephfs'
     storageSizeMinio: 50Gi
     storageSizeNCOBackup: 5Gi
     enabled: true
     storageSizeNCOPrimary: 5Gi
-    storageClassNCOPrimary: 'vsphere-sc'
+    storageClassNCOPrimary: 'ocs-storagecluster-cephfs'
     storageSizeImpactServer: 5Gi
-    storageClassImpactServer: 'vsphere-sc'
-    storageClassKafka: 'vsphere-sc'
+    storageClassImpactServer: 'ocs-storagecluster-cephfs'
+    storageClassKafka: 'ocs-storagecluster-cephfs'
     storageSizeKafka: 50Gi
-    storageClassCassandraBackup: 'vsphere-sc'
+    storageClassCassandraBackup: 'ocs-storagecluster-cephfs'
     storageSizeCassandraBackup: 50Gi
-    storageClassZookeeper: 'vsphere-sc'
-    storageClassCouchdb: 'vsphere-sc'
+    storageClassZookeeper: 'ocs-storagecluster-cephfs'
+    storageClassCouchdb: 'ocs-storagecluster-cephfs'
     storageSizeZookeeper: 5Gi
     storageSizeCouchdb: 20Gi
-    storageClassCassandraData: 'vsphere-sc'
+    storageClassCassandraData: 'ocs-storagecluster-cephfs'
     storageSizeCassandraData: 50Gi
-    storageClassElastic: 'vsphere-sc'
-    storageClassImpactGUI: 'vsphere-sc'
+    storageClassElastic: 'ocs-storagecluster-cephfs'
+    storageClassImpactGUI: 'ocs-storagecluster-cephfs'
     storageSizeImpactGUI: 5Gi
     storageSizeElastic: 75Gi
-    storageClassNCOBackup: 'vsphere-sc'
-    storageClassPostgresql: 'vsphere-sc'
+    storageClassNCOBackup: 'ocs-storagecluster-cephfs'
+    storageClassPostgresql: 'ocs-storagecluster-cephfs'
     storageSizePostgresql: 100Gi
-    storageClassPostgresqlWal: 'vsphere-sc'
+    storageClassPostgresqlWal: 'ocs-storagecluster-cephfs'
     storageSizePostgresqlWal: 100Gi
-    storageClassSharedSpark: 'vsphere-sc'
+    storageClassSharedSpark: 'ocs-storagecluster-cephfs'
     storageSizeSharedSpark: 100Gi
   postgresql:
     edbPostgresImage: cp.icr.io/cp/cpd/postgresql:13.8@sha256:91a88a30e9cd2dd5e5d1e8cfb588b12e3852939f777b9e9ddc6657d3bbc10367
@@ -62,11 +62,11 @@ spec:
     edbPostgresSubscriptionName: cloud-native-postgresql-catalog-subscription
   deploymentType: trial
   topology:
-    storageClassElasticTopology: 'vsphere-sc'
+    storageClassElasticTopology: 'ocs-storagecluster-cephfs'
     storageSizeElasticTopology: 75Gi
     storageSizeFileObserver: 5Gi
     storageSizeSdconapObserver: 5Gi
-    storageClassFileObserver: 'vsphere-sc'
+    storageClassFileObserver: 'ocs-storagecluster-cephfs'
     iafCartridgeRequirementsName: ''
     appDisco:
       enabled: false

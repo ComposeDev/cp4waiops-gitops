@@ -11,7 +11,7 @@ spec:
   source:
     path: ./
     repoURL: https://github.com/ComposeDev/cp4waiops-gitops
-    targetRevision: main
+    targetRevision: k8s
   syncPolicy:
     automated:
       prune: true
