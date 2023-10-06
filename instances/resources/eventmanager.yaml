@@ -23,7 +23,7 @@ spec:
     global.service.nodePort.enable: true
   backupRestore:
     enableAnalyticsBackups: false
-  version: 1.6.9
+  version: 1.6.10
   entitlementSecret: ibm-entitlement-key
   clusterDomain: apps.aiops.is.compose.se
   persistence:
@@ -57,8 +57,6 @@ spec:
     storageClassSharedSpark: 'vsphere-sc'
     storageSizeSharedSpark: 100Gi
   postgresql:
-    edbPostgresImage: cp.icr.io/cp/cpd/postgresql:13.8@sha256:91a88a30e9cd2dd5e5d1e8cfb588b12e3852939f777b9e9ddc6657d3bbc10367
-    edbPostgresLicenseImage: cp.icr.io/cp/cpd/edb-postgres-license-provider@sha256:fd8339c382e1c5d69184d9c3f299a3da5c9a12a579e0db5e76e86d65be9190fd
     edbPostgresSubscriptionName: cloud-native-postgresql-catalog-subscription
   deploymentType: trial
   topology:
